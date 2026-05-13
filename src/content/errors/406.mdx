@@ -1,0 +1,51 @@
+---
+code: 406
+name: "Not Acceptable"
+nameJa: "受け入れ可能な形式がありません"
+category: client
+summary: クライアントが Accept ヘッダで要求した形式をサーバーが提供できません。
+synonyms: ["not acceptable", "406", "accept ヘッダ不一致", "受入不可", "形式合わない"]
+related: [415, 400]
+commonCauses:
+  - title: Accept ヘッダで指定した MIME に対応がない
+    hint: application/xml を要求したが、サーバーは JSON しか返せない
+  - title: Accept-Language で対応外の言語を要求
+    hint: 提供されているロケールに含まれていない
+  - title: Accept-Encoding の指定が厳しすぎる
+    hint: identity 以外を拒否しているのに、サーバーが圧縮しか返さない
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.7"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.7"
+    source: rfc
+  - label: "MDN: 406 Not Acceptable"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/406"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+406 は「あなたが受け取りたいと言った形には、こちらは応えられません」というサインです。
+教室で言えば、英訳しか手元にない先生に「日本語で説明して」と頼んだら、「すみません、その形では出せません」と返される——そんな状況に近いです。
+
+クライアントは `Accept` ヘッダで「こういう形式でくれると嬉しい」と希望を出します。サーバーがその希望のうちどれにも対応できないとき、406 が返ります。415 は「送ったボディの形式が非対応」、406 は「受け取りたい形式が非対応」という対称関係です。
+
+## 黒板からのひとこと
+
+授業で「英語で説明できる先生にしか質問しない」と決めて手を挙げる生徒がいたら、英語が苦手な先生は「ごめん、その条件には当てはまらないかな」と返すしかありません。先生が悪いわけでも生徒が悪いわけでもなく、ただ条件が合わなかっただけです。
+
+406 もそれと同じで、要求の出し方を少し緩めるだけで通ることがほとんどです。`Accept: */*` のように受け入れ幅を広げる、あるいは API ドキュメントを読んで対応形式に合わせる——どちらかで決着がつきます。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **Accept ヘッダを緩める**：希望を絞りすぎていないか、`*/*` で再試行
+2. **API ドキュメントで対応形式を確認**：返せる Content-Type、言語、エンコーディングを把握
+3. **ライブラリのデフォルトを確認**：HTTP クライアントが厳しい Accept を自動付与していないか
+4. **ネゴシエーションを設計（管理者向け）**：複数形式の提供方針、Vary ヘッダ、エラー応答での候補提示
+
+<ResponseExample status={406} statusText="Not Acceptable" />

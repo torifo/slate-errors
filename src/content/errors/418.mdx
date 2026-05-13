@@ -1,0 +1,51 @@
+---
+code: 418
+name: "I'm a teapot"
+nameJa: "私はティーポットです"
+category: client
+summary: RFC 2324 のジョークステータス。コーヒーを淹れろと言われたティーポット。
+synonyms: ["teapot", "418", "ジョーク", "april fool", "ティーポット"]
+related: [400]
+commonCauses:
+  - title: HTCPCP (RFC 2324) のジョーク実装
+    hint: 1998 年エイプリルフールに公開された遊び心のある仕様
+  - title: アプリ独自のイースターエッグ
+    hint: 隠し機能や開発者向けの遊びとして 418 を返す例
+  - title: ボット/スクレイパー対策の応答
+    hint: 一部のサービスが意図的に 418 で帰してリクエストを撹乱する
+rfc: "2324"
+references:
+  - label: "RFC 2324 §2.3.2"
+    url: "https://www.rfc-editor.org/rfc/rfc2324#section-2.3.2"
+    source: rfc
+  - label: "MDN: 418 I'm a teapot"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/418"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+418 は「コーヒーを淹れてほしいと頼まれたけれど、自分はティーポットなので無理です」というサインです。
+真面目な仕様の中に紛れ込んだ、HTTP 唯一のジョークステータスです。1998 年のエイプリルフールに公開された RFC 2324 (Hyper Text Coffee Pot Control Protocol) で定義されました。
+
+実務でこのコードに出会うことは稀で、出会ったとしてもアプリ独自のイースターエッグかボット対策である場合がほとんどです。番号は 451 (Unavailable For Legal Reasons) と少しだけ似ていますが、こちらは華氏 451 度の本のほうにちなんだ別コードです。
+
+## 黒板からのひとこと
+
+教室で、化学の先生に体育の質問をしてしまったら、「専門外で力になれないけど、隣の先生に聞いてみて」と返されるでしょう。418 はそれよりさらに大袈裟に「自分はそもそもその役割じゃない」と返している、お茶目な応答です。
+
+仕様としては遊びでも、HTTP の世界に「ステータスコードに人格を持たせる」という発想を持ち込んだ歴史的な番号でもあります。技術書のあちこちで顔を出す名物コード、と覚えておくと十分です。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **そのサービスのドキュメントを読む**：独自の意味で使っている可能性
+2. **本物のコーヒー API を探す**：仕様としては実装する必要のないコード
+3. **404 や 400 と取り違えていないか確認**：たまにフレームワークの遊びで返すことも
+4. **API 設計のユーモアと節度（管理者向け）**：ジョークコードの利用は社内ガイドラインを揃えてから
+
+<ResponseExample status={418} statusText="I'm a teapot" />
