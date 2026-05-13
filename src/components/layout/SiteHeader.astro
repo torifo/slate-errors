@@ -1,0 +1,23 @@
+---
+import { url } from '@/lib/url';
+
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = '/' } = Astro.props;
+const isHome = currentPath === '/' || currentPath === '/slate-errors/';
+---
+<header class="border-b border-dashed border-[var(--color-chalk-dust)] mb-8">
+  <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+    <a href={url('')} class="!no-underline">
+      <span class="font-[Finger_Paint] text-[var(--color-chalk-amber)] text-xl chalk-text-amber">
+        Slate Errors
+      </span>
+    </a>
+    {!isHome && (
+      <nav class="flex gap-4 text-sm">
+        <a href={url('errors/')}>全件</a>
+      </nav>
+    )}
+  </div>
+</header>
