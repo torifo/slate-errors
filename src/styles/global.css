@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────
+ * Theme tokens — Tailwind v4 CSS-first
+ * ───────────────────────────────────────────── */
+@theme {
+  /* Colors (OKLCH) */
+  --color-board-deep:     oklch(0.22 0.04 145);
+  --color-board-mid:      oklch(0.28 0.05 145);
+  --color-board-edge:     oklch(0.18 0.03 145);
+  --color-frame-walnut:   oklch(0.38 0.06 60);
+  --color-frame-shadow:   oklch(0.22 0.04 60);
+  --color-chalk-white:    oklch(0.94 0.01 80);
+  --color-chalk-amber:    oklch(0.84 0.14 85);
+  --color-chalk-pink:     oklch(0.82 0.10 10);
+  --color-chalk-mint:     oklch(0.85 0.10 165);
+  --color-chalk-dust:     oklch(0.70 0.02 80);
+
+  /* Fonts */
+  --font-display:  "Finger Paint", "Kiwi Maru", system-ui, sans-serif;
+  --font-body:     "Kiwi Maru", "Hiragino Maru Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+  --font-mono:     ui-monospace, "SFMono-Regular", "Menlo", monospace;
+
+  /* Type scale */
+  --text-xs: 0.78rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.18rem;
+  --text-xl: 1.4rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.2rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4.5rem;
+
+  /* Misc */
+  --radius-chalk: 0.25rem;
+  --shadow-board: inset 0 0 80px rgba(0, 0, 0, 0.35);
+  --shadow-frame: 0 6px 0 var(--color-frame-shadow), 0 12px 24px rgba(0, 0, 0, 0.4);
+  --ease-chalk: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────
+ * Base layer
+ * ───────────────────────────────────────────── */
+@layer base {
+  /* @font-face フォールバック */
+  @font-face {
+    font-family: "Finger Paint";
+    font-display: swap;
+    src: local("Finger Paint");
+  }
+  @font-face {
+    font-family: "Kiwi Maru";
+    font-display: swap;
+    src: local("Kiwi Maru");
+  }
+
+  html {
+    background: var(--color-board-edge);
+    color: var(--color-chalk-white);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    font-feature-settings: "palt";
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-board-deep);
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.02), transparent 60%);
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--color-chalk-amber);
+    color: var(--color-board-deep);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-chalk-amber);
+    letter-spacing: 0.03em;
+  }
+
+  :not(pre) > code {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-chalk);
+    padding: 0.05em 0.35em;
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  :focus-visible {
+    outline: 2px dashed var(--color-chalk-amber);
+    outline-offset: 4px;
+  }
+
+  /* デフォルト無効化 */
+  button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+  }
+
+  a {
+    color: var(--color-chalk-amber);
+    text-decoration: underline wavy var(--color-chalk-amber);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 150ms var(--ease-chalk);
+  }
+  a:hover {
+    color: var(--color-chalk-white);
+    text-decoration-color: var(--color-chalk-white);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
