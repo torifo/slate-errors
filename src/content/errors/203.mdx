@@ -1,0 +1,52 @@
+---
+code: 203
+name: "Non-Authoritative Information"
+nameJa: "公式ではない情報"
+category: success
+summary: プロキシ等が応答を変更しているため、サーバー直接の情報ではない。
+synonyms: ["non-authoritative", "203", "プロキシ改変", "中継変換"]
+related: [200]
+commonCauses:
+  - title: 中間プロキシがレスポンスを書き換えた
+    hint: ヘッダや本文の一部が中継機器の手で変えられている
+  - title: トランスフォーミング CDN/プロキシ経由
+    hint: 画像最適化や HTML 圧縮を挟んでいる構成
+  - title: フィルタリングサービスを通したレスポンス
+    hint: 親会社のフィルタや会社のプロキシが内容を加工
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.3.4"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.3.4"
+    source: rfc
+  - label: "MDN: 203 Non-Authoritative Information"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/203"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## うまくいった証
+
+203 は「リクエスト自体は成功したけれど、君に届いた内容は本来のサーバーから直接ではなく、途中で誰かが手を加えた可能性があるよ」と教えてくれるサインです。
+プールに例えると、自分のコーチからではなく、別のコーチが「だいたいこんな感じだったよ」と伝言で伝えてくれる——あの「直接ではない」感触です。
+
+実務でこのコードに出会うことは多くありませんが、CDN や会社プロキシなどが応答を加工する構成では出ることがあります。挙動としては 200 とほぼ同じで、注意書きが付いた成功と理解して大丈夫です。
+
+## プールからのひとこと
+
+プールサイドで自分のコーチがいないとき、別の先生に「あの先生はどう言ってた？」と尋ねると、「たぶんこう言ってたと思うよ」と少し含みを持たせた答えが返ってくることがあります。本人ではないからこその、控えめな伝え方。
+
+203 もそれに似ていて、「本物の情報源からそのまま」ではない、という前置きをつけて成功を返している状態。クライアントは中身を信用してよいけれど、出所が中継経由だということを把握できます。
+
+## 次への一歩
+
+うまくいった、次はこうしてみよう：
+
+1. **レスポンス内容をそのまま使ってよい**：基本は 200 と同じ扱いで問題ない
+2. **重要な値はオリジンと比較**：精緻なデータが必要なら直接アクセスを検討
+3. **どの中継機器が変換しているか把握**：`Via` や `X-Cache` 系ヘッダで追える
+4. **不要な変換は剥がす (管理者向け)**：CDN/プロキシで意図せぬ書き換えがあれば設定を見直す
+
+<ResponseExample status={203} statusText="Non-Authoritative Information" />

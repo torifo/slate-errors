@@ -1,0 +1,52 @@
+---
+code: 200
+name: "OK"
+nameJa: "成功"
+category: success
+summary: リクエストが完全に成功した。最も標準的な「うまくいった」応答。
+synonyms: ["OK", "200", "成功", "success"]
+related: [201, 204, 304]
+commonCauses:
+  - title: GET でページや API レスポンスが返る
+    hint: もっとも頻繁に出会うステータス、Web の基本通貨
+  - title: POST/PUT が成功し本文も返る
+    hint: 作成だが Location が無いケースは 200、ある場合は 201
+  - title: 期待通りに処理が完結
+    hint: ボディには結果データが入っていることが多い
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.3.1"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.3.1"
+    source: rfc
+  - label: "MDN: 200 OK"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/200"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## うまくいった証
+
+200 は「リクエストは無事に成功した」というもっとも基本的な応答です。
+プールで言うなら、25メートルを泳ぎきって、プールサイドで先生が「OK、合格」と頷いてくれた——あの安堵に近いサインです。
+
+何の特殊なルールも前提もなく、「ふつうにうまくいった」と返す。HTTP の世界でいちばん登場回数が多く、これが返るとブラウザはレスポンスボディをそのまま画面に描き、API クライアントはデータを受け取って次の処理に進みます。
+
+## プールからのひとこと
+
+プールの授業で、決まった距離をきれいに泳ぎきれば、先生は特別な言葉を足さずに「OK」とだけ言ってくれます。100点ではないかもしれない、でも合格条件は満たしている。それで授業は気持ちよく次に進みます。
+
+200 もちょうどそんな空気感です。「全部完璧」とまでは言わないけれど、「とりあえずうまくいった、続けてどうぞ」と返してくれる。Web を支える、いちばん頼もしい数字でもあります。
+
+## 次への一歩
+
+うまくいった、次はこうしてみよう：
+
+1. **レスポンスボディを使って画面を更新**：データを取り出して UI に反映する
+2. **キャッシュ可能か確認**：`Cache-Control` などのヘッダを見て、再リクエストの戦略を決める
+3. **Content-Type を信じすぎない**：実データが期待通りか軽くバリデーション
+4. **メトリクスとして記録 (管理者向け)**：成功率を継続的に観察して、サービスの健康指標とする
+
+<ResponseExample status={200} statusText="OK" />

@@ -1,0 +1,52 @@
+---
+code: 206
+name: "Partial Content"
+nameJa: "部分内容"
+category: success
+summary: Range ヘッダで要求された一部だけを返した (動画ストリーミング等)。
+synonyms: ["partial content", "206", "range", "ストリーミング", "部分応答"]
+related: [416, 200]
+commonCauses:
+  - title: 動画/音声のシークやストリーミング再生
+    hint: プレイヤーが必要な範囲だけを Range で要求する
+  - title: 大きなファイルのレジューム可能ダウンロード
+    hint: 通信が切れても続きから再開できる
+  - title: ファイルチャンクの並列ダウンロード
+    hint: 高速化のために複数の範囲を同時取得
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.3.7"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.3.7"
+    source: rfc
+  - label: "MDN: 206 Partial Content"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/206"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## うまくいった証
+
+206 は「君が指定した範囲だけ、その分のデータを返したよ」というサインです。
+プールに例えると、「全長は泳がなくていい、ここからここまでだけ往復してみよう」と先生に区間を切られて、その区間だけを正確に泳ぎきる——あの「指定範囲だけクリア」の感触に似ています。
+
+クライアントが `Range` ヘッダで「最初の 1MB だけ」「ここから 5MB だけ」と要求すると、サーバーはその部分だけを 206 で返します。動画プレイヤーのシーク、レジューム可能なダウンロード、大容量ファイルの効率配信に欠かせない仕組みです。
+
+## プールからのひとこと
+
+プールでの練習では、いつも端から端まで泳ぐとは限りません。「今日は 25メートル のうち、最後の 10メートル だけタイムを計るよ」と先生が言えば、生徒はその区間だけ集中して泳ぎます。短くても、ちゃんとした成果として認められる。
+
+206 もそれと同じです。「全部じゃなく一部だけ」を成功として返す。`Content-Range` ヘッダに「全体のどこを返したか」が入るので、クライアントは続きを取りに行くことも、必要な範囲だけ使うこともできます。
+
+## 次への一歩
+
+うまくいった、次はこうしてみよう：
+
+1. **`Content-Range` を見て位置を把握**：全体のどの範囲かを確認してバッファに入れる
+2. **必要なら追加 Range を要求**：続きが必要なら次のチャンクをリクエスト
+3. **不正な範囲には 416 が返ることを想定**：境界外を要求しないよう注意
+4. **ストリーミングは Range 対応必須 (管理者向け)**：CDN や静的配信サーバーが Range をサポートしているかを確認
+
+<ResponseExample status={206} statusText="Partial Content" />

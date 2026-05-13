@@ -1,0 +1,52 @@
+---
+code: 204
+name: "No Content"
+nameJa: "内容なし"
+category: success
+summary: リクエストは成功したが、返す本文はない (DELETE 後等)。
+synonyms: ["no content", "204", "ボディなし", "本文なし"]
+related: [200, 205, 304]
+commonCauses:
+  - title: DELETE が成功した
+    hint: 削除に成功した結果、返すべき本文がない
+  - title: PUT で更新成功、本文を返す必要がない
+    hint: 通信量を減らしたい API でよく使う
+  - title: ブラウザ拡張やビーコン送信
+    hint: 受け取り完了だけ伝えて画面遷移は起こさない
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.3.5"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.3.5"
+    source: rfc
+  - label: "MDN: 204 No Content"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/204"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## うまくいった証
+
+204 は「リクエストは成功したけれど、わざわざ返すような本文はないよ」という静かな完了サインです。
+プールで例えると、課題の周回を泳ぎきって、特にコメントもなく先生が黙って頷くだけ——あの「言わずもがなのOK」に似ています。
+
+DELETE で削除が完了したときや、PUT で値だけ更新して返す内容がないときに自然に使われます。本文を持たないので、ブラウザは画面を再描画せず、そのままの表示を保ちます。通信量を抑えたい API には頼もしい選択肢です。
+
+## プールからのひとこと
+
+プールでの居残り練習が終わったとき、先生が長い講評をせず、ただ「お疲れさま」とだけ言って帰してくれることがあります。それで十分わかる。新しい指示はないし、できたという事実だけが伝われば終わりでいい。
+
+204 もそれと同じ温度感の応答です。報告書はないけれど、ちゃんとうまくいった。次にどうするかはクライアントの判断に委ねられている、軽くて静かな成功サインです。
+
+## 次への一歩
+
+うまくいった、次はこうしてみよう：
+
+1. **画面状態をローカルで更新**：レスポンスボディがないので UI 側で楽観的に反映
+2. **削除や更新のフィードバックを表示**：ユーザーには「完了しました」を別途伝える
+3. **ボディを期待するコードに注意**：`response.json()` を呼んで失敗するパターンに気をつける
+4. **API 設計のガイドラインに含める (管理者向け)**：いつ 200、いつ 204 を返すかチームで揃える
+
+<ResponseExample status={204} statusText="No Content" />

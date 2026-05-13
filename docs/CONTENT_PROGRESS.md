@@ -1,6 +1,6 @@
 # Slate Errors コンテンツ進捗
 
-**完了: 44 / 62**
+**完了: 54 / 62**
 
 ## Phase 1: 旗艦 (4 / 4) ✓
 - [x] 404 Not Found
@@ -56,3 +56,15 @@
 - [x] 101 Switching Protocols
 - [x] 102 Processing
 - [x] 103 Early Hints
+
+## Phase O: 2xx (10 / 10) ✓
+- [x] 200 OK
+- [x] 201 Created
+- [x] 202 Accepted
+- [x] 203 Non-Authoritative Information
+- [x] 204 No Content
+- [x] 205 Reset Content
+- [x] 206 Partial Content
+- [x] 207 Multi-Status
+- [x] 208 Already Reported
+- [x] 226 IM Used

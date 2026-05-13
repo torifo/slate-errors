@@ -1,0 +1,52 @@
+---
+code: 201
+name: "Created"
+nameJa: "作成しました"
+category: success
+summary: 新しいリソースが作成された (POST/PUT後)。Location ヘッダで場所を伝える。
+synonyms: ["created", "201", "新規作成", "post 成功"]
+related: [200, 202]
+commonCauses:
+  - title: REST API で POST が成功して新規レコード作成
+    hint: 作成された URL は Location ヘッダに入る
+  - title: PUT で新しいリソースが置かれた
+    hint: 既存更新なら 200、新規なら 201 が慣例
+  - title: ファイルアップロードが成功
+    hint: 保存先の URL を返すパターンも 201 が自然
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.3.2"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.3.2"
+    source: rfc
+  - label: "MDN: 201 Created"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/201"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## うまくいった証
+
+201 は「君のリクエストで新しいリソースが生まれた、その置き場所はここだよ」と教えてくれる成功サインです。
+プールに例えると、新しい泳ぎのコースが追加され、「君のレーンはこちら、ここから始めてね」と先生が場所まで案内してくれる——そんな段取りの良さです。
+
+`Location` ヘッダに新しいリソースの URL が入るのが大切な約束で、クライアントはこれを読んでブックマークするなり、続きの操作で使うなりできます。POST 後の挙動として、200 よりも丁寧で意味のある応答です。
+
+## プールからのひとこと
+
+プールに新しいレーンを引いたとき、先生はただ「できた」と言うだけでなく、「3番目のレーン、向こうから3つ目だよ」と場所まで指してくれます。生徒は迷わずそのレーンに泳ぎに行ける。
+
+201 もまさにそれと同じ役割で、「作ったよ」だけで終わらせず、「ここに置いたよ」まで伝える。クライアントがそのまま次の操作に移れる、思いやりのあるサインです。
+
+## 次への一歩
+
+ここから先：
+
+1. **`Location` ヘッダのURLを読む**：作成されたリソースに直接アクセスできる
+2. **作成されたデータを画面に反映**：レスポンスボディや Location 先のデータを使う
+3. **冪等性を意識した設計**：再送に備えて重複作成を防ぐ仕組みを持っておく
+4. **API ガイドラインに 201 の使い分けを書く (管理者向け)**：チーム内で 200 と 201 をいつ返すかを揃える
+
+<ResponseExample status={201} statusText="Created" />
