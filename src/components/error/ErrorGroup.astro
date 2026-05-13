@@ -3,13 +3,18 @@ import ErrorCard from './ErrorCard.astro';
 import type { ErrorEntry } from '@/lib/errors';
 
 interface Props {
-  category: 'client' | 'server';
+  category: 'informational' | 'success' | 'redirection' | 'client' | 'server';
   entries: ErrorEntry[];
 }
 const { category, entries } = Astro.props;
-const heading = category === 'client'
-  ? '4xx — Client Errors（クライアント側のつまずき）'
-  : '5xx — Server Errors（サーバー側のつまずき）';
+const headings: Record<string, string> = {
+  client: '4xx — Client Errors（クライアント側のつまずき）',
+  server: '5xx — Server Errors（サーバー側のつまずき）',
+  informational: '1xx — Informational（校庭：朝礼の合図）',
+  success: '2xx — Success（プール：達成の証）',
+  redirection: '3xx — Redirection（渡り廊下：別の場所へ）',
+};
+const heading = headings[category] ?? category;
 ---
 <section class="my-12">
   <h2 class="text-2xl font-[Finger_Paint] chalk-text-amber mb-6 chalk-underline">
