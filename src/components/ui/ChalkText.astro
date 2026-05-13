@@ -1,0 +1,8 @@
+---
+interface Props { color?: 'white' | 'amber'; }
+const { color = 'amber' } = Astro.props;
+const cls = color === 'amber' ? 'chalk-text-amber' : 'chalk-text';
+---
+<span class={cls} style={color === 'amber' ? 'color: var(--color-chalk-amber);' : ''}>
+  <slot />
+</span>
