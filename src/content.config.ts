@@ -1,7 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const errorCategory = z.enum(['client', 'server']);
+const errorCategory = z.enum(['informational', 'success', 'redirection', 'client', 'server']);
 
 const commonCause = z.object({
   title: z.string(),
@@ -17,7 +17,7 @@ const referenceLink = z.object({
 const errors = defineCollection({
   loader: glob({ pattern: ['**/*.mdx', '!**/_*.mdx'], base: './src/content/errors' }),
   schema: z.object({
-    code: z.number().int().min(400).max(599),
+    code: z.number().int().min(100).max(599),
     name: z.string(),
     nameJa: z.string(),
     category: errorCategory,

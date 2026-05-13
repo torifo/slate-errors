@@ -7,7 +7,7 @@ export type SearchIndexEntry = {
   nameJa: string;
   summary: string;
   synonyms: string[];
-  category: 'client' | 'server';
+  category: 'informational' | 'success' | 'redirection' | 'client' | 'server';
   url: string;
 };
 
