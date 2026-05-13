@@ -1,0 +1,26 @@
+---
+import { getPrevNext } from '@/lib/errors';
+import { url } from '@/lib/url';
+
+interface Props { code: number; }
+const { code } = Astro.props;
+const { prev, next } = await getPrevNext(code);
+---
+<nav class="my-12 flex justify-between gap-4 text-sm">
+  {prev ? (
+    <a href={url(`errors/${prev.data.code}/`)} class="flex-1 p-4 chalkboard !no-underline">
+      <div class="text-[var(--color-chalk-dust)] text-xs">← 前のエラー</div>
+      <div class="chalk-text-amber font-[Finger_Paint] text-lg mt-1">
+        {prev.data.code} {prev.data.name}
+      </div>
+    </a>
+  ) : <div class="flex-1" />}
+  {next ? (
+    <a href={url(`errors/${next.data.code}/`)} class="flex-1 p-4 chalkboard !no-underline text-right">
+      <div class="text-[var(--color-chalk-dust)] text-xs">次のエラー →</div>
+      <div class="chalk-text-amber font-[Finger_Paint] text-lg mt-1">
+        {next.data.code} {next.data.name}
+      </div>
+    </a>
+  ) : <div class="flex-1" />}
+</nav>
