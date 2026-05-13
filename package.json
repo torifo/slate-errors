@@ -7,11 +7,23 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "build": "astro check && astro build",
+    "preview": "astro preview --base /slate-errors",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "astro": "^6.3.1"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/sitemap": "^3.7.2",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.3.1",
+    "fuse.js": "^7.3.0",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "vitest": "^4.1.6"
   }
 }
