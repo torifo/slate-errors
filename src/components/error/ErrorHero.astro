@@ -6,7 +6,14 @@ interface Props {
   entry: ErrorEntry;
 }
 const { entry } = Astro.props;
-const categoryLabel = entry.data.category === 'client' ? 'Client Error' : 'Server Error';
+const categoryLabels: Record<string, string> = {
+  client: 'Client Error',
+  server: 'Server Error',
+  informational: 'Informational (1xx)',
+  success: 'Success (2xx)',
+  redirection: 'Redirection (3xx)',
+};
+const categoryLabel = categoryLabels[entry.data.category] ?? entry.data.category;
 ---
 <BlackboardFrame size="hero" class="my-8">
   <div class="text-center">
