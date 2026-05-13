@@ -1,0 +1,21 @@
+---
+import HomeLayout from '@/layouts/HomeLayout.astro';
+import ErrorGroup from '@/components/error/ErrorGroup.astro';
+import { getAllErrors, groupByCategory } from '@/lib/errors';
+
+const all = await getAllErrors();
+const { client, server } = groupByCategory(all);
+---
+<HomeLayout title="全件一覧" description="HTTPエラーコード全件の図書館型一覧。4xx/5xxごとにグループ化。">
+  <header class="my-8 text-center">
+    <h1 class="text-3xl font-[Finger_Paint] chalk-text-amber chalk-underline">
+      全件一覧
+    </h1>
+    <p class="text-[var(--color-chalk-dust)] mt-2">
+      4xx と 5xx、それぞれの黒板に並べました
+    </p>
+  </header>
+
+  <ErrorGroup category="client" entries={client} />
+  <ErrorGroup category="server" entries={server} />
+</HomeLayout>
