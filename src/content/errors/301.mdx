@@ -1,0 +1,52 @@
+---
+code: 301
+name: "Moved Permanently"
+nameJa: "永久に移動しました"
+category: redirection
+summary: リソースが恒久的に別のURLに移動。今後はそちらを使うように。
+synonyms: ["moved permanently", "301", "リダイレクト", "永久移動"]
+related: [302, 308, 410]
+commonCauses:
+  - title: ドメインや URL 構成の変更
+    hint: 旧URLから新URLへ恒久的に移行した
+  - title: HTTP から HTTPS への移行
+    hint: サイト全体の常時 HTTPS 化でよく使われる
+  - title: 旧 API エンドポイントの整理
+    hint: バージョン昇格や階層構造の刷新で発行
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.2"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.2"
+    source: rfc
+  - label: "MDN: 301 Moved Permanently"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/301"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+301 は「このリソースは恒久的に別の URL に引っ越したよ。今後はそちらを使ってね」というサインです。
+渡り廊下で先生が「美術室は本館から第二校舎に引っ越したよ。これからは第二校舎の方ね」と案内してくれる——あの「もう戻らない引っ越し」の感触に似ています。
+
+ブラウザはこれを覚えて、次回からは新しい URL に直接アクセスするようになります。検索エンジンも 301 を見てインデックスを更新するため、SEO の観点でも非常に重要なステータスです。
+
+## 渡り廊下からのひとこと
+
+校舎の改修で教室が引っ越したとき、渡り廊下の入口に「美術室は第二校舎4階に移転しました」と貼り紙が出ます。みんなそれを見て新しい道順を覚え、次からは直接そちらに歩いていく。誰も古い場所には戻らない。
+
+301 もちょうどその貼り紙と同じ役割です。「ここはもう違う場所、これからはあちら」を一度はっきり伝えれば、クライアントもキャッシュも検索エンジンも新しい URL を覚えてくれる。整理された移行を作る基本のサインです。
+
+## たどり着くまで
+
+案内に従うときの一歩：
+
+1. **`Location` ヘッダの新 URL に切り替える**：以後はそちらを使うよう参照を更新
+2. **ブックマークやリンクを更新**：古い URL の利用を減らしていく
+3. **POST が GET に変わる可能性に注意**：メソッドを保ちたいなら 308 を検討
+4. **正しい単位でリダイレクトを設定 (管理者向け)**：HTTPS 化やドメイン移行は 301 で恒久的に通知
+
+<ResponseExample status={301} statusText="Moved Permanently" />

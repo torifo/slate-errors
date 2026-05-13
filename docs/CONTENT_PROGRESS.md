@@ -1,6 +1,6 @@
 # Slate Errors コンテンツ進捗
 
-**完了: 54 / 62**
+**完了: 62 / 62** ✓
 
 ## Phase 1: 旗艦 (4 / 4) ✓
 - [x] 404 Not Found
@@ -68,3 +68,13 @@
 - [x] 207 Multi-Status
 - [x] 208 Already Reported
 - [x] 226 IM Used
+
+## Phase P: 3xx (8 / 8) ✓
+- [x] 300 Multiple Choices
+- [x] 301 Moved Permanently
+- [x] 302 Found
+- [x] 303 See Other
+- [x] 304 Not Modified
+- [x] 305 Use Proxy
+- [x] 307 Temporary Redirect
+- [x] 308 Permanent Redirect

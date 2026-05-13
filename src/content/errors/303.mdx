@@ -1,0 +1,52 @@
+---
+code: 303
+name: "See Other"
+nameJa: "他を見てください"
+category: redirection
+summary: 別のURLで結果を取得してください (POSTの後 GET推奨)。
+synonyms: ["see other", "303", "post-redirect-get", "prg"]
+related: [302, 307]
+commonCauses:
+  - title: POST 後に結果ページへ GET で誘導
+    hint: いわゆる Post-Redirect-Get パターン
+  - title: フォーム再送信ダイアログを出させない設計
+    hint: ブラウザのリロードでも安全に
+  - title: API 操作後のリソース URL 案内
+    hint: 操作の結果として見るべき場所を示す
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.4"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.4"
+    source: rfc
+  - label: "MDN: 303 See Other"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/303"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+303 は「依頼そのものは受け取った。結果を見たければ、別の URL に GET でアクセスしてね」というサインです。
+渡り廊下で先生が「アンケート用紙はあちらの机の上に置いておくから、回答を確認したい人はあそこに見に行ってね」と教えてくれる——あの「結果は別の場所」の案内に似ています。
+
+POST でフォームを送ったあとに、サーバーが完了ページへ GET でリダイレクトさせる Post-Redirect-Get (PRG) パターンの主役。これにより、ユーザーがリロードしても二重送信にならない、クリーンな遷移を作れます。
+
+## 渡り廊下からのひとこと
+
+授業のアンケートを集めたあと、先生は答えのまとめを別の掲示板に貼ります。「提出はこの机だけど、結果は廊下の掲示板で見てね」と分けることで、提出と確認が混ざらない。あとから何度でも安全に見に行ける。
+
+303 もこの考え方を Web に持ち込んだサインです。「データの送信先」と「結果の取得先」を意識的に分けることで、リロード問題や二重操作を防げる。アプリケーションの安全な動線を作る要のステータスです。
+
+## たどり着くまで
+
+案内に従うときの一歩：
+
+1. **`Location` のURLへ GET で移動**：メソッドは GET に変わる仕様
+2. **元のリクエストは完了とみなす**：再送せずに次のページへ
+3. **フォーム送信後は 303 を選ぶ習慣**：PRG パターンで二重送信を防ぐ
+4. **API でも完了→確認の分離を意識 (管理者向け)**：操作と確認を別 URL に分ける設計が安全
+
+<ResponseExample status={303} statusText="See Other" />

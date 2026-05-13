@@ -1,0 +1,52 @@
+---
+code: 307
+name: "Temporary Redirect"
+nameJa: "一時的なリダイレクト"
+category: redirection
+summary: 一時的に別のURLへ。HTTPメソッドは変更しない (302との違い)。
+synonyms: ["temporary redirect", "307", "method preserved", "メソッド維持"]
+related: [302, 308]
+commonCauses:
+  - title: 短期的な保守作業中の振り替え
+    hint: メソッドを保ったまま代替先へ案内したいとき
+  - title: 認証方式変更中の暫定経路
+    hint: POST のままで違うエンドポイントに送りたい
+  - title: A/B テストや段階リリースの一時的な振り分け
+    hint: 期間限定でメソッドを保ちつつ別系へ
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.8"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.8"
+    source: rfc
+  - label: "MDN: 307 Temporary Redirect"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/307"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+307 は「いまだけ別の場所に行ってほしい。ただし、リクエストの方法 (GET/POST など) は変えないでね」と案内するサインです。
+渡り廊下で先生が「今日だけ別の教室で同じ授業をやるよ。授業内容は同じだから、そのまま続けてね」と案内してくれる——あの「やり方は変えず、場所だけ違う」感触に似ています。
+
+302 と意味は近いですが、決定的に違うのが「メソッドの扱い」です。302 では多くの実装で POST→GET に変わってしまいますが、307 は仕様としてメソッドを保つことを明確にしています。POST/PUT/DELETE を保ったまま振り替えたいときに頼れます。
+
+## 渡り廊下からのひとこと
+
+プログラム内容を変えずに、教室だけ別のところに移したい——そんなときに先生は「同じ持ち物、同じやり方で、向こうの教室に行ってね」と案内します。書きかけのノートも、そのまま使う。続きが断絶しない移動が大切です。
+
+307 はその思想を反映した一時リダイレクトで、リクエストボディもメソッドもそのまま運ばれます。302 が抱えていた曖昧さを解消し、API でも安心して使えるシンプルな振り替えサインになっています。
+
+## たどり着くまで
+
+案内に従うときの一歩：
+
+1. **`Location` のURLへ同じメソッドで再送**：POST なら POST のまま、ボディもそのまま
+2. **元の URL は記憶しておく**：恒久ではないので参照は残す
+3. **冪等性を意識した API 設計**：再送時の重複処理に備える
+4. **保守期間中などは 307 で安全に振替 (管理者向け)**：302 の曖昧さを避けたいときに有効
+
+<ResponseExample status={307} statusText="Temporary Redirect" />

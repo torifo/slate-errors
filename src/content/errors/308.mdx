@@ -1,0 +1,52 @@
+---
+code: 308
+name: "Permanent Redirect"
+nameJa: "恒久的なリダイレクト"
+category: redirection
+summary: 恒久的に別のURLへ。HTTPメソッドを変更しない (301との違い)。
+synonyms: ["permanent redirect", "308", "method preserved", "メソッド維持"]
+related: [301, 307]
+commonCauses:
+  - title: API エンドポイントを恒久的に移転
+    hint: POST/PUT のメソッドを保ったまま新しい URL へ案内
+  - title: HTTPS 化や正規ドメインへの統一
+    hint: GET 以外のリクエストも安全に飛ばしたい
+  - title: バージョン昇格や API リネーム
+    hint: 旧 URL を完全に廃止し、新 URL に切り替える
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.9"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.9"
+    source: rfc
+  - label: "MDN: 308 Permanent Redirect"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/308"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+308 は「このリソースは恒久的に別の URL に移った。今後はそちらを使ってね。ただし、リクエストの方法 (GET/POST など) は変えなくていいよ」と案内するサインです。
+渡り廊下で先生が「教室は永久に第二校舎へ移ったよ。ただ、授業のやり方は同じだから、そのまま続けてね」と案内してくれる——あの「引っ越し済み、でもやり方は維持」の感触に近いコードです。
+
+301 と恒久性は同じですが、301 では実装によって POST が GET に変わることがあります。308 はメソッドとボディを保つことを明確にした、API 移行に安心して使える恒久リダイレクトです。
+
+## 渡り廊下からのひとこと
+
+校舎の建て替えで教室が引っ越しても、授業の進め方や生徒の持ち物は同じ。「教室の場所は永久に変わったけれど、いつもどおりノートを開いて、いつもどおり手を挙げてね」と先生が伝えてくれれば、生徒は迷いなく続きを始められます。
+
+308 もまさにそれと同じ役割で、URL は永久に変わったけれど、リクエストの中身は変えない。API のドメイン移行や HTTPS 化を、メソッドを保ったまま安全に進めるための強力なリダイレクトです。
+
+## たどり着くまで
+
+新しい場所へ、こうたどり着く：
+
+1. **`Location` の新 URL に切り替える**：以後はそちらを使うよう参照を更新
+2. **メソッドとボディは変えない**：POST のまま新しい URL に再送
+3. **キャッシュやブックマークも更新**：恒久移動なので長く効く
+4. **API 移行は 308 を基本に検討 (管理者向け)**：301 の曖昧さを避け、メソッド保持を保証する
+
+<ResponseExample status={308} statusText="Permanent Redirect" />

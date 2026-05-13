@@ -1,0 +1,52 @@
+---
+code: 305
+name: "Use Proxy"
+nameJa: "プロキシを使ってください"
+category: redirection
+summary: プロキシ経由でアクセスして欲しい (現在は使われない、deprecated)。
+synonyms: ["use proxy", "305", "deprecated", "プロキシ経由"]
+related: [407]
+commonCauses:
+  - title: 古い HTTP/1.1 仕様で定義された機能の名残
+    hint: セキュリティ上の懸念で現在は無効化されている
+  - title: 一部の古いネットワーク機器の挙動
+    hint: 出会ったとしても無視するクライアントが多い
+  - title: 仕様書の歴史を知るための記録
+    hint: 互換性のために番号は残されている
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.6"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.6"
+    source: rfc
+  - label: "MDN: 305 Use Proxy"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/305"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+305 は「このリソースに直接アクセスせず、指定したプロキシ経由で取りに行ってね」と案内する歴史的なサインです。
+渡り廊下で先生が「直接職員室に行かないで、まず受付の先生を通ってから」と道筋を指定する——そんな迂回案内のイメージに近い番号です。
+
+ただし、この応答はセキュリティ上の問題で現在は使われません (deprecated)。多くのブラウザやクライアントは 305 を見ても従わないので、新しいシステムで 305 を返す設計はおすすめできません。仕様の歴史を知るためのコードと考えてよいです。
+
+## 渡り廊下からのひとこと
+
+校舎の構造が古い時代には、「直接ここに来ないで、必ず受付を通ってください」と細かく動線を指定する案内が多くありました。事故防止のためでしたが、生徒が増えると現実的でなくなり、いまは多くの学校でその制限は外されています。
+
+305 もそれと似た歴史を辿ったサインです。「プロキシを通せ」と言われても、現代のクライアントは従わない。古い仕様の中で姿だけ残っている、いわば資料館入りした番号と理解して大丈夫です。
+
+## たどり着くまで
+
+案内に従うときの一歩：
+
+1. **クライアントは 305 を無視するのが現実**：実装側は対応しなくてよい
+2. **代わりに 407 (Proxy Authentication Required) を検討**：プロキシ経由を強制したい場合
+3. **新しい設計では使わない**：既存実装を撤去する方向で
+4. **ネットワーク制御は別の手段で (管理者向け)**：DNS/ファイアウォール/明示的な接続設定で実現する
+
+<ResponseExample status={305} statusText="Use Proxy" />

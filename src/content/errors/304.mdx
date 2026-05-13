@@ -1,0 +1,52 @@
+---
+code: 304
+name: "Not Modified"
+nameJa: "変更なし"
+category: redirection
+summary: キャッシュ済みの内容と変わっていない、再ダウンロード不要。
+synonyms: ["not modified", "304", "キャッシュ", "etag", "条件付き取得"]
+related: [200, 412]
+commonCauses:
+  - title: ブラウザの条件付きリクエストにヒット
+    hint: "If-None-Match や If-Modified-Since で問い合わせて変化なし"
+  - title: CDN キャッシュ層からの効率的な応答
+    hint: オリジンに問い合わせず手元のコピーで OK と判定
+  - title: 静的アセット (画像/JS/CSS) の再訪
+    hint: ETag がそのままなのでダウンロード不要
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.4.5"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.4.5"
+    source: rfc
+  - label: "MDN: 304 Not Modified"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/304"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## どこへ案内された？
+
+304 は「君が前に持っていったコピー、まだ変わっていないよ。ダウンロードしなくて大丈夫」という応答です。
+渡り廊下で先生が「君のノートは前と同じ内容だから、また書き写さなくていいよ」と声をかけてくれる——あの「持ち帰らずに済んだ」感触に似ています。
+
+クライアントが `ETag` や `Last-Modified` を覚えておいて、次に同じものを要求するとき「これは前と同じ？」と問い合わせます。サーバーが「同じだよ」と答えるのが 304。本文は返さないので、通信量と表示時間が大きく節約されます。
+
+## 渡り廊下からのひとこと
+
+学校の連絡黒板の前を毎朝通るとき、内容が昨日と同じなら、書き写すまでもなく素通りしてよい。先生も「昨日と変わらないよ」と一言かけるだけで済む。お互いの労力を抑えながら、必要な情報共有はちゃんと続いていく。
+
+304 はこの「変化があるときだけ動く」工夫を Web 全体に広げたサインです。ページを高速化し、サーバー負荷を下げ、モバイル回線にもやさしい。Web のパフォーマンスを支える、地味だけど偉大な番号です。
+
+## たどり着くまで
+
+新しい場所へ、こうたどり着く：
+
+1. **手元のキャッシュを使い続ける**：`ETag` が一致するなら手元のコピーで OK
+2. **`Cache-Control` を併用して期限を整える**：必要に応じて再検証の頻度を調整
+3. **ETag を生成・比較する仕組みを意識**：サーバー側もハッシュベースで管理
+4. **CDN で 304 が返る構成を作る (管理者向け)**：オリジン負荷を下げ、表示も速くなる
+
+<ResponseExample status={304} statusText="Not Modified" />
