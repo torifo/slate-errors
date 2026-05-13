@@ -6,11 +6,14 @@
     type="search"
     class="input-chalk"
     placeholder="コードか名前で探す... (例: 404, ページなし, timeout)"
+    aria-label="エラーコードまたはキーワードで検索"
     data-search-input
     autocomplete="off"
   />
   <ul
     class="absolute top-full left-0 right-0 mt-2 chalkboard hidden max-h-96 overflow-y-auto z-10"
+    role="listbox"
+    aria-live="polite"
     data-search-results
   ></ul>
 </div>

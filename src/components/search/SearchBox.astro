@@ -11,11 +11,12 @@
         type="search"
         class="input-chalk"
         placeholder="コードか名前で探す..."
+        aria-label="エラーコードまたはキーワードで検索"
         data-search-input
         autocomplete="off"
       />
     </div>
-    <ul class="mt-3 max-h-96 overflow-y-auto" data-search-results></ul>
+    <ul class="mt-3 max-h-96 overflow-y-auto" role="listbox" aria-live="polite" data-search-results></ul>
   </div>
 </dialog>
 <script>
