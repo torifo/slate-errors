@@ -1,0 +1,52 @@
+---
+code: 103
+name: "Early Hints"
+nameJa: "先行ヒント"
+category: informational
+summary: 最終応答の前に、ブラウザに早めのリンク (preload等) を伝えるヒント。
+synonyms: ["early hints", "103", "preload", "server hint", "先行ヒント"]
+related: [200]
+commonCauses:
+  - title: 表示高速化のための preload ヒント先送り
+    hint: 本体の HTML を作る間に、CSS/フォントなどを並行で取りに行かせる
+  - title: CDN/エッジでの先回り通知
+    hint: オリジンの応答前にエッジが 103 を返してブラウザを動かす
+  - title: HTTP/2 Server Push の代替
+    hint: Push の廃止後、103 がリソースヒントの主流に
+popular: false
+rfc: "8297"
+references:
+  - label: "RFC 8297"
+    url: "https://www.rfc-editor.org/rfc/rfc8297"
+    source: rfc
+  - label: "MDN: 103 Early Hints"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/103"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## これは何のサイン？
+
+103 は「最終的な答えはまだ準備中だけど、先にこのリソースを取りにいっておくと早く済むよ」と教えてくれる先回りのヒントです。
+校庭で例えると、コーチが朝の集合時に「次の体育ではボールとビブスを使うから、準備室から出しておいてね」と先に教えてくれる——あの段取りのよさに似ています。
+
+サーバーは 103 で `Link` ヘッダを送り、ブラウザは本体 HTML を待たずに CSS やフォントの取得を始められます。実装が広がってきた比較的新しいサインで、ページ表示の高速化に効きます。
+
+## 校庭からのひとこと
+
+校庭での朝礼では、その日の予定を先に伝えてくれると、生徒は次の動きの準備ができます。「次は体育館に移動して、跳び箱を出しておく必要があるよ」と言ってもらえれば、空き時間に器具を運ぶ生徒が出てきて、本番がスムーズになります。
+
+103 はちょうどそれと同じ役割です。本体の応答 (200) はあとから来ますが、その前に「先に取りに行ってよさそうなもの」だけを教えてくれる。並行して動くことで、ページが見える時間が早まります。
+
+## 受け止め方
+
+次にあなたができること：
+
+1. **`Link` ヘッダのヒントに従って先取り取得**：preload 指定のリソースを並列で取り始める
+2. **ブラウザ対応を確認**：ChromiumやFirefoxの新しめのバージョンが対応、古いと無視されるだけで害はない
+3. **サーバー側で対応する LP を選ぶ**：効果が大きいページから少しずつ 103 を返す
+4. **CDN/エッジでの中継設定を確認 (管理者向け)**：上流が 103 を投げても、中間機器が落としてしまうと意味がなくなる
+
+<ResponseExample status={103} statusText="Early Hints" />

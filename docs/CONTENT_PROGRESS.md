@@ -1,6 +1,6 @@
 # Slate Errors コンテンツ進捗
 
-**完了: 40 / 40** ✓
+**完了: 44 / 62**
 
 ## Phase 1: 旗艦 (4 / 4) ✓
 - [x] 404 Not Found
@@ -50,3 +50,9 @@
 - [x] 508 Loop Detected
 - [x] 510 Not Extended
 - [x] 511 Network Authentication Required
+
+## Phase N: 1xx (4 / 4) ✓
+- [x] 100 Continue
+- [x] 101 Switching Protocols
+- [x] 102 Processing
+- [x] 103 Early Hints

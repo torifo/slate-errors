@@ -1,0 +1,52 @@
+---
+code: 101
+name: "Switching Protocols"
+nameJa: "プロトコルを切り替えます"
+category: informational
+summary: サーバーがクライアントの要求通りにプロトコル (HTTP→WebSocket等) を切り替えます。
+synonyms: ["switching protocols", "101", "websocket", "upgrade", "プロトコル切替"]
+related: [426, 200]
+commonCauses:
+  - title: WebSocket への切り替え時
+    hint: "ブラウザが Upgrade: websocket を要求し、サーバーが応じた瞬間"
+  - title: HTTP/2 への手動アップグレード
+    hint: HTTP/1.1 から h2c へ切り替える際 (現代では稀)
+  - title: その他のプロトコルへの切替要求
+    hint: TLS や独自プロトコルへの切替を Upgrade ヘッダで合意
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.2.2"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.2.2"
+    source: rfc
+  - label: "MDN: 101 Switching Protocols"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/101"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## これは何のサイン？
+
+101 は「あなたの要求通り、ここから先は別のプロトコルに切り替えます」というサーバーからの宣言です。
+校庭で言えば、コーチがマイクを取り「ここまで体操の時間でしたが、次はリレーの練習に切り替えます」とアナウンスしてフォーメーションを変える——そんな切替の合図です。
+
+クライアントが `Upgrade` ヘッダで「次は WebSocket で話そう」「HTTP/2 で続けよう」と提案し、サーバーが「了解、切り替えるよ」と応じたときに返ります。実用上、もっとも頻繁に見るのは WebSocket 開始時です。
+
+## 校庭からのひとこと
+
+校庭での朝練が終わり、コーチが「ここからリレー走に切り替えるよ。靴ひもを締め直してね」と声をかけると、生徒たちは次の動きの準備を始めます。同じ場所、同じ仲間でも、ここから先は違うルールで動く。
+
+101 もそれと同じで、TCP のコネクションは保ったまま、その上で話す言葉 (プロトコル) だけを切り替えます。返ってくる側にとっては「合意しました、これから新しいルールで」という静かな宣言です。
+
+## 受け止め方
+
+次にあなたができること：
+
+1. **新しいプロトコルで通信を続行**：101 が返ったら、Upgrade で指定したプロトコル (例: WebSocket) で送受信を始める
+2. **クライアントライブラリを最新化**：古いライブラリは Upgrade に正しく対応していないことがある
+3. **接続のフローを記録**：WebSocket デバッグ時は 101 のレスポンスヘッダ全体を残す
+4. **プロキシ越しの動作を確認 (管理者向け)**：CDN・LB が Upgrade ヘッダを透過させる設定になっているか
+
+<ResponseExample status={101} statusText="Switching Protocols" />
