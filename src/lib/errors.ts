@@ -49,3 +49,19 @@ export function groupByCategory(entries: ErrorEntry[]): {
     server: entries.filter(e => e.data.category === 'server'),
   };
 }
+
+export function groupByAllCategories(entries: ErrorEntry[]): {
+  informational: ErrorEntry[];
+  success: ErrorEntry[];
+  redirection: ErrorEntry[];
+  client: ErrorEntry[];
+  server: ErrorEntry[];
+} {
+  return {
+    informational: entries.filter(e => e.data.category === 'informational'),
+    success: entries.filter(e => e.data.category === 'success'),
+    redirection: entries.filter(e => e.data.category === 'redirection'),
+    client: entries.filter(e => e.data.category === 'client'),
+    server: entries.filter(e => e.data.category === 'server'),
+  };
+}

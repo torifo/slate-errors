@@ -16,6 +16,21 @@ const mockEntries = [
     category: 'client', summary: '...', synonyms: [], related: [],
     commonCauses: [], references: [], popular: false, draft: false,
   }},
+  { id: '100', body: '', collection: 'errors', data: {
+    code: 100, name: 'Continue', nameJa: '続行',
+    category: 'informational', summary: '...', synonyms: [], related: [],
+    commonCauses: [], references: [], popular: false, draft: false,
+  }},
+  { id: '200', body: '', collection: 'errors', data: {
+    code: 200, name: 'OK', nameJa: 'OK',
+    category: 'success', summary: '...', synonyms: [], related: [],
+    commonCauses: [], references: [], popular: false, draft: false,
+  }},
+  { id: '301', body: '', collection: 'errors', data: {
+    code: 301, name: 'Moved Permanently', nameJa: '恒久的に移動',
+    category: 'redirection', summary: '...', synonyms: [], related: [],
+    commonCauses: [], references: [], popular: false, draft: false,
+  }},
   { id: '_TEMPLATE', body: '', collection: 'errors', data: {
     code: 0, name: '', nameJa: '', category: 'client', summary: '',
     synonyms: [], related: [], commonCauses: [], references: [],
@@ -32,18 +47,19 @@ vi.mock('astro:content', () => ({
 
 import {
   getAllErrors, getErrorByCode, getPopularErrors,
-  getPrevNext, getRelated, groupByCategory,
+  getPrevNext, getRelated, groupByCategory, groupByAllCategories,
 } from '../errors';
 
 describe('getAllErrors', () => {
   it('excludes drafts and template files', async () => {
     const errors = await getAllErrors();
-    expect(errors.map(e => e.data.code).sort()).toEqual([403, 404, 500]);
+    expect(errors.map(e => e.data.code).sort((a, b) => a - b))
+      .toEqual([100, 200, 301, 403, 404, 500]);
   });
 
   it('returns sorted by code ascending', async () => {
     const errors = await getAllErrors();
-    expect(errors.map(e => e.data.code)).toEqual([403, 404, 500]);
+    expect(errors.map(e => e.data.code)).toEqual([100, 200, 301, 403, 404, 500]);
   });
 });
 
@@ -74,7 +90,7 @@ describe('getPrevNext', () => {
   });
 
   it('returns undefined for first entry prev', async () => {
-    const { prev } = await getPrevNext(403);
+    const { prev } = await getPrevNext(100);
     expect(prev).toBeUndefined();
   });
 
@@ -103,6 +119,26 @@ describe('groupByCategory', () => {
   it('splits entries by client/server', async () => {
     const all = await getAllErrors();
     const { client, server } = groupByCategory(all);
+    expect(client.map(e => e.data.code)).toEqual([403, 404]);
+    expect(server.map(e => e.data.code)).toEqual([500]);
+  });
+});
+
+describe('groupByAllCategories', () => {
+  it('returns 5 buckets keyed by category', async () => {
+    const all = await getAllErrors();
+    const groups = groupByAllCategories(all);
+    expect(Object.keys(groups).sort()).toEqual(
+      ['client', 'informational', 'redirection', 'server', 'success'],
+    );
+  });
+
+  it('places each entry into the correct bucket', async () => {
+    const all = await getAllErrors();
+    const { informational, success, redirection, client, server } = groupByAllCategories(all);
+    expect(informational.map(e => e.data.code)).toEqual([100]);
+    expect(success.map(e => e.data.code)).toEqual([200]);
+    expect(redirection.map(e => e.data.code)).toEqual([301]);
     expect(client.map(e => e.data.code)).toEqual([403, 404]);
     expect(server.map(e => e.data.code)).toEqual([500]);
   });

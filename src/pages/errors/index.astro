@@ -1,21 +1,41 @@
 ---
 import HomeLayout from '@/layouts/HomeLayout.astro';
 import ErrorGroup from '@/components/error/ErrorGroup.astro';
-import { getAllErrors, groupByCategory } from '@/lib/errors';
+import { getAllErrors, groupByAllCategories } from '@/lib/errors';
 
 const all = await getAllErrors();
-const { client, server } = groupByCategory(all);
+const { informational, success, redirection, client, server } = groupByAllCategories(all);
+const omakeCount = informational.length + success.length + redirection.length;
 ---
-<HomeLayout title="全件一覧" description="HTTPエラーコード全件の図書館型一覧。4xx/5xxごとにグループ化。">
+<HomeLayout title="全件一覧" description="HTTPステータスコード全件の図書館型一覧。教室と職員室、そして学校外の施設たち。">
   <header class="my-8 text-center">
     <h1 class="text-3xl font-[Finger_Paint] chalk-text-amber chalk-underline">
       全件一覧
     </h1>
     <p class="text-[var(--color-chalk-dust)] mt-2">
-      4xx と 5xx、それぞれの黒板に並べました
+      まずはエラー、それから学校外の施設たち
     </p>
   </header>
 
-  <ErrorGroup category="client" entries={client} />
-  <ErrorGroup category="server" entries={server} />
+  <section class="my-12">
+    <h2 class="text-2xl font-[Finger_Paint] chalk-text-amber mb-2">
+      エラー — 教室と職員室で起きること
+    </h2>
+    <ErrorGroup category="client" entries={client} />
+    <ErrorGroup category="server" entries={server} />
+  </section>
+
+  {omakeCount > 0 && (
+    <section class="my-16">
+      <h2 class="text-2xl font-[Finger_Paint] chalk-text-amber mb-2">
+        おまけ — 学校外の施設たち
+      </h2>
+      <p class="text-[var(--color-chalk-dust)] mb-4">
+        校庭、プール、渡り廊下。エラーじゃないけれど、HTTPの大切な合図たち。
+      </p>
+      <ErrorGroup category="informational" entries={informational} />
+      <ErrorGroup category="success" entries={success} />
+      <ErrorGroup category="redirection" entries={redirection} />
+    </section>
+  )}
 </HomeLayout>
