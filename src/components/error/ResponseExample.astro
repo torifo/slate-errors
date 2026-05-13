@@ -1,0 +1,29 @@
+---
+interface Props {
+  status: number;
+  statusText: string;
+  body?: string;
+  contentType?: string;
+}
+const {
+  status,
+  statusText,
+  body = `<!DOCTYPE html>\n<html><body><h1>${status} ${statusText}</h1></body></html>`,
+  contentType = 'text/html; charset=utf-8',
+} = Astro.props;
+---
+<section class="my-8">
+  <h3 class="text-lg font-[Finger_Paint] chalk-text-amber mb-3">
+    実際にはこう見える
+  </h3>
+  <div class="chalkboard p-4">
+    <p class="text-sm text-[var(--color-chalk-dust)] mb-2">$ リクエスト</p>
+    <pre><code>curl -i https://example.com/some/path</code></pre>
+
+    <p class="text-sm text-[var(--color-chalk-dust)] mt-4 mb-2">↓ レスポンス</p>
+    <pre><code>HTTP/1.1 {status} {statusText}
+Content-Type: {contentType}
+
+{body}</code></pre>
+  </div>
+</section>
