@@ -1,0 +1,24 @@
+---
+import BlackboardFrame from '@/components/layout/BlackboardFrame.astro';
+import type { ErrorEntry } from '@/lib/errors';
+
+interface Props {
+  entry: ErrorEntry;
+}
+const { entry } = Astro.props;
+const categoryLabel = entry.data.category === 'client' ? 'Client Error' : 'Server Error';
+---
+<BlackboardFrame size="hero" class="my-8">
+  <div class="text-center">
+    <p class="text-sm text-[var(--color-chalk-dust)] uppercase tracking-widest">
+      {categoryLabel}
+    </p>
+    <div class="chalk-numeral my-4">{entry.data.code}</div>
+    <h1 class="font-[Finger_Paint] text-[var(--color-chalk-amber)] text-2xl chalk-text-amber">
+      {entry.data.name}
+    </h1>
+    <p class="text-lg text-[var(--color-chalk-white)] mt-2">
+      — {entry.data.nameJa}
+    </p>
+  </div>
+</BlackboardFrame>
