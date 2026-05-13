@@ -1,7 +1,7 @@
 # Slate Errors コンテンツ進捗
 
 ## Phase 1: 旗艦 (0 / 4)
-- [ ] 404 Not Found
+- [x] 404 Not Found
 - [ ] 500 Internal Server Error
 - [ ] 403 Forbidden
 - [ ] 502 Bad Gateway
