@@ -1,0 +1,26 @@
+---
+interface CommonCause {
+  title: string;
+  hint?: string;
+}
+interface Props { causes: CommonCause[]; }
+const { causes } = Astro.props;
+---
+<section class="my-8 chalkboard p-6">
+  <h2 class="text-lg font-[Finger_Paint] chalk-text-amber mb-3">
+    まずは確認: よくある原因 TOP{causes.length}
+  </h2>
+  <ol class="space-y-2">
+    {causes.map((c) => (
+      <li class="flex gap-3">
+        <span class="chalk-text-amber font-[Finger_Paint] text-lg leading-none">
+          ✓
+        </span>
+        <div>
+          <div class="text-[var(--color-chalk-white)]">{c.title}</div>
+          {c.hint && <div class="text-sm text-[var(--color-chalk-dust)]">{c.hint}</div>}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
