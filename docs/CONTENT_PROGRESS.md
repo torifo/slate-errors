@@ -2,7 +2,7 @@
 
 ## Phase 1: 旗艦 (0 / 4)
 - [x] 404 Not Found
-- [ ] 500 Internal Server Error
+- [x] 500 Internal Server Error
 - [ ] 403 Forbidden
 - [ ] 502 Bad Gateway
 
