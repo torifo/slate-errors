@@ -1,0 +1,19 @@
+---
+interface Props {
+  size?: 'hero' | 'card' | 'panel';
+  class?: string;
+}
+
+const { size = 'panel', class: className = '' } = Astro.props;
+
+const sizeClass = {
+  hero: 'p-8 md:p-12',
+  card: 'p-4',
+  panel: 'p-6',
+}[size];
+---
+<div class={`chalkboard-frame ${className}`}>
+  <div class={`chalkboard ${sizeClass}`}>
+    <slot />
+  </div>
+</div>
