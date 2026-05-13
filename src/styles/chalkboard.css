@@ -191,3 +191,81 @@
   font-size: var(--text-sm);
   line-height: 1.6;
 }
+
+/* ─────────────────────────────────────────────
+ * Twin Chart link — anchor-ports の海の世界観を slate-errors 側で再現
+ * (相互翻訳: anchor-ports 側にも .slate-twin-link で黒板を再現する対の関係)
+ * ───────────────────────────────────────────── */
+.anchor-twin-link {
+  --ap-abyss: #001a33;
+  --ap-panel: #06243d;
+  --ap-mist: #d9f7ff;
+  --ap-cyan: #00d2ff;
+  --ap-gold: #ffc65c;
+
+  display: grid;
+  gap: 0.35rem;
+  position: relative;
+  padding: 1.4rem 1.6rem;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 30%),
+    radial-gradient(circle at 82% 8%, rgba(237,248,255,0.22), transparent 18rem),
+    radial-gradient(circle at 18% 12%, rgba(0,210,255,0.10), transparent 26rem),
+    linear-gradient(135deg, var(--ap-abyss), #03101f 58%, #00111f);
+  color: var(--ap-mist);
+  border: 1px solid rgba(138,183,201,0.52);
+  /* anchor-ports の border-strict と同じ切り欠きコーナー */
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  box-shadow:
+    inset 0 0 0 1px rgba(237,248,255,0.06),
+    inset 18px 0 42px rgba(237,248,255,0.035);
+  text-decoration: none;
+  transition: transform 200ms cubic-bezier(.4,0,.2,1), box-shadow 200ms cubic-bezier(.4,0,.2,1);
+}
+.anchor-twin-link:hover {
+  transform: translateY(-2px);
+  /* anchor-ports の hover:shadow-neon と同等 */
+  box-shadow:
+    inset 0 0 0 1px rgba(237,248,255,0.06),
+    0 0 0 1px rgba(237,248,255,0.28),
+    0 0 34px rgba(138,183,201,0.32);
+}
+.anchor-twin-link:focus-visible {
+  outline: 2px solid rgba(217,247,255,0.7);
+  outline-offset: 4px;
+}
+
+.anchor-twin-link__label {
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: rgba(217,247,255,0.7);
+}
+.anchor-twin-link__title {
+  font-family: "Pirata One", "JetBrains Mono", system-ui, cursive;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--ap-mist);
+  margin-top: 0.25rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 10px rgba(217,247,255,0.25);
+}
+.anchor-twin-link__copy {
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(217,247,255,0.78);
+  margin-top: 0.6rem;
+  padding-right: 2rem;
+}
+.anchor-twin-link__arrow {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.2rem;
+  font-family: "Pirata One", system-ui, cursive;
+  font-size: 1.4rem;
+  color: var(--ap-mist);
+  opacity: 0.85;
+}
