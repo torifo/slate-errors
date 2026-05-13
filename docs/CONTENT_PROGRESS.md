@@ -1,5 +1,7 @@
 # Slate Errors コンテンツ進捗
 
+**完了: 40 / 40** ✓
+
 ## Phase 1: 旗艦 (4 / 4) ✓
 - [x] 404 Not Found
 - [x] 500 Internal Server Error
@@ -19,32 +21,32 @@
 - [x] 503 Service Unavailable
 - [x] 504 Gateway Timeout
 
-## Phase 3: 残り (0 / 25)
+## Phase 3: 残り (25 / 25) ✓
 ### 4xx
-- [ ] 402 Payment Required
-- [ ] 406 Not Acceptable
-- [ ] 407 Proxy Authentication Required
-- [ ] 408 Request Timeout
-- [ ] 411 Length Required
-- [ ] 412 Precondition Failed
-- [ ] 414 URI Too Long
-- [ ] 415 Unsupported Media Type
-- [ ] 416 Range Not Satisfiable
-- [ ] 417 Expectation Failed
-- [ ] 418 I'm a teapot
-- [ ] 421 Misdirected Request
-- [ ] 423 Locked
-- [ ] 424 Failed Dependency
-- [ ] 425 Too Early
-- [ ] 426 Upgrade Required
-- [ ] 428 Precondition Required
-- [ ] 431 Request Header Fields Too Large
-- [ ] 451 Unavailable For Legal Reasons
+- [x] 402 Payment Required
+- [x] 406 Not Acceptable
+- [x] 407 Proxy Authentication Required
+- [x] 408 Request Timeout
+- [x] 411 Length Required
+- [x] 412 Precondition Failed
+- [x] 414 URI Too Long
+- [x] 415 Unsupported Media Type
+- [x] 416 Range Not Satisfiable
+- [x] 417 Expectation Failed
+- [x] 418 I'm a teapot
+- [x] 421 Misdirected Request
+- [x] 423 Locked
+- [x] 424 Failed Dependency
+- [x] 425 Too Early
+- [x] 426 Upgrade Required
+- [x] 428 Precondition Required
+- [x] 431 Request Header Fields Too Large
+- [x] 451 Unavailable For Legal Reasons
 
 ### 5xx
-- [ ] 505 HTTP Version Not Supported
-- [ ] 506 Variant Also Negotiates
-- [ ] 507 Insufficient Storage
-- [ ] 508 Loop Detected
-- [ ] 510 Not Extended
-- [ ] 511 Network Authentication Required
+- [x] 505 HTTP Version Not Supported
+- [x] 506 Variant Also Negotiates
+- [x] 507 Insufficient Storage
+- [x] 508 Loop Detected
+- [x] 510 Not Extended
+- [x] 511 Network Authentication Required
