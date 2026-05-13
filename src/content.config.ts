@@ -15,7 +15,7 @@ const referenceLink = z.object({
 });
 
 const errors = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/errors' }),
+  loader: glob({ pattern: ['**/*.mdx', '!**/_*.mdx'], base: './src/content/errors' }),
   schema: z.object({
     code: z.number().int().min(400).max(599),
     name: z.string(),
