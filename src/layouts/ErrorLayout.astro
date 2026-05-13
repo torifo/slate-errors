@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import type { ErrorEntry } from '@/lib/errors';
+
+interface Props {
+  entry: ErrorEntry;
+}
+const { entry } = Astro.props;
+const title = `${entry.data.code} ${entry.data.name}`;
+const description = entry.data.summary;
+---
+<BaseLayout title={title} description={description} path={`/errors/${entry.data.code}/`}>
+  <SiteHeader currentPath={`/errors/${entry.data.code}/`} />
+  <main class="max-w-3xl mx-auto px-4">
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

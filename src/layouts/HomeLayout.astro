@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = "Slate Errors", description } = Astro.props;
+---
+<BaseLayout title={title} description={description} path="/">
+  <SiteHeader currentPath="/" />
+  <main class="max-w-5xl mx-auto px-4">
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>
