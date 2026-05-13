@@ -1,0 +1,51 @@
+---
+code: 417
+name: "Expectation Failed"
+nameJa: "Expect ヘッダの期待が果たせません"
+category: client
+summary: Expect ヘッダで指定された期待値をサーバーが満たせない。
+synonyms: ["expectation", "417", "expect ヘッダ", "100-continue 失敗", "期待失敗"]
+related: [400]
+commonCauses:
+  - title: Expect 100-continue にサーバーが対応していない
+    hint: 古いサーバーや一部プロキシは 100-continue を理解しない
+  - title: クライアントの自動付与
+    hint: HTTP クライアントが大きなボディに自動で Expect を付ける設定
+  - title: 中継プロキシでの取り扱いの不整合
+    hint: プロキシとオリジンサーバーの対応バージョンが食い違っている
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.18"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.18"
+    source: rfc
+  - label: "MDN: 417 Expectation Failed"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/417"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+417 は「クライアントが『これに対応していますか？』と先に確認したけれど、サーバーは『その期待には応えられません』と返した」というサインです。
+教室で言えば、生徒が手を挙げて「先生、この質問に英語で答えられますか？」と前置きしたら、先生が「英語では難しい」と答えた——そんな場面に近いです。質問そのものではなく、その「やり方」に対する確認で止まっています。
+
+実務でよく見るのは `Expect: 100-continue` という、大きなボディを送る前にサーバーの受け入れ可否を確かめる仕組みです。サーバーやプロキシが古くてこれを理解しないと、417 を返すことがあります。
+
+## 黒板からのひとこと
+
+教室で大きな図解を黒板に貼りたいとき、生徒はまず先生に「この大きさで貼っていいですか？」と確認することがあります。先生が「うちの黒板にはちょっと無理」と返せば、貼り出す前にやり方を考え直せる。手間より先に、確認の段階で止まっているわけです。
+
+417 もそれと同じで、本体の処理に進む前の「事前合意」の段階で噛み合わなかった、という応答です。Expect ヘッダを外すか、サーバー側で 100-continue に対応するかの二択になります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **Expect ヘッダを外す**：HTTP クライアント側で 100-continue を無効化する設定
+2. **小さなボディで送る**：本当に大きなアップロードか確認、不要なら通常送信
+3. **サーバーのバージョンを確認**：100-continue 対応のあるサーバーへ切り替え
+4. **プロキシ設定を確認（管理者向け）**：Expect の透過や除去の挙動、ログから不整合を切り分ける
+
+<ResponseExample status={417} statusText="Expectation Failed" />

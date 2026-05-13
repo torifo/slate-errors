@@ -1,0 +1,51 @@
+---
+code: 421
+name: "Misdirected Request"
+nameJa: "宛先が違います"
+category: client
+summary: このサーバーで応答できないリクエストが届きました。
+synonyms: ["misdirected", "421", "ホスト違い", "宛先誤り", "wrong host"]
+related: [400, 404]
+commonCauses:
+  - title: HTTP/2 のコネクション再利用で誤ったホストに到達
+    hint: 同じ TLS 接続を使い回した結果、別ドメインのリクエストが流入
+  - title: ロードバランサや CDN のルーティング設定
+    hint: SNI と Host ヘッダの不一致で振り分けが正しく行われない
+  - title: 共有 IP のホスト指定ミス
+    hint: 仮想ホスト構成で、Host ヘッダがどこにも対応していない
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.20"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.20"
+    source: rfc
+  - label: "MDN: 421 Misdirected Request"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/421"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+421 は「あなたが届けた手紙、ここの教室宛じゃないですよ」というサインです。
+教室で言えば、提出物を持って隣の教室に入ってしまい「うちはそのクラスじゃないよ、向かいの部屋だよ」と返される——そんな場面に近いです。サーバーは存在しますが、そのリクエストを処理する責任を持っていません。
+
+HTTP/2 や HTTP/3 では、同じ接続を複数のドメインで使い回すことができます。その仕組みが噛み合わないと、本来は別のサーバーが応えるべきリクエストが、たまたま開いている接続を通じて来てしまう。サーバーはそれに気付いて 421 で返します。
+
+## 黒板からのひとこと
+
+学校に同じ名前の先生が二人いると、生徒は誤って違う先生の教室に質問を持ち込むことがあります。「同じ名字でも、僕じゃなくて隣の教室の先生のほうだよ」と教えてもらえれば、生徒は素直に出直せます。
+
+421 もそれと同じで、サーバーは「この接続では応えられないけれど、新しく接続し直せば届くはずだよ」と教えてくれています。クライアントは別の接続でやり直せば、たいてい解決します。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **接続を張り直して再送**：HTTP クライアントが既存接続を使い回さないよう設定
+2. **Host / :authority ヘッダの値を確認**：意図した宛先を正しく指定しているか
+3. **CDN / LB のルーティングを確認**：振り分けルールと TLS 証明書の対象ドメインの整合
+4. **仮想ホスト設定を確認（管理者向け）**：SNI、ALPN、ホストごとのバックエンド指定を順に点検
+
+<ResponseExample status={421} statusText="Misdirected Request" />

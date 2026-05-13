@@ -1,0 +1,51 @@
+---
+code: 411
+name: "Length Required"
+nameJa: "Content-Length が必要です"
+category: client
+summary: サーバーが Content-Length ヘッダを要求しているのに、ない。
+synonyms: ["length required", "411", "content-length", "長さ必須", "ヘッダ不足"]
+related: [400, 413]
+commonCauses:
+  - title: クライアントが Content-Length を付け忘れた
+    hint: 自作のリクエスト送信処理で、ヘッダ計算が抜けていないか
+  - title: チャンク転送 (Transfer-Encoding) を許可していないサーバー
+    hint: HTTP/1.0 互換のサーバーは長さ必須のことが多い
+  - title: プロキシ経由でヘッダが落ちた
+    hint: 中継のプロキシが Content-Length を削っている可能性
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.12"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.12"
+    source: rfc
+  - label: "MDN: 411 Length Required"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/411"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+411 は「届いた荷物に『中身は何ページ分です』というラベルが付いていない」というサインです。
+教室で言えば、ノートを提出するときに表紙へ「全 12 ページ」と書く決まりなのに、その表記が抜けていた——そんな状況に近いです。サーバーは中身を読みに行く前に「長さが分からないと受け取れない」と止めます。
+
+多くの場合、HTTP/1.1 のチャンク転送に対応していない古めのサーバーや、厳しいプロキシ設定で起きます。`Content-Length` ヘッダを付ければ素直に通ることがほとんどです。
+
+## 黒板からのひとこと
+
+授業で配られる回覧物には、よく「全 3 枚」と表紙に書かれています。これがあると、途中で 1 枚だけ落ちたときにすぐ気づけるし、受け取った側も確認しやすい。先生は安心して回覧を回すことができます。
+
+411 もそれと同じで、「長さの宣言」があると、サーバーは中身を読みながら「ちゃんと最後まで届いた」と判断できます。チャンク転送が使えない相手には、明示的に長さを書いて渡す——そのひと手間が必要というだけです。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **Content-Length ヘッダを付ける**：ボディのバイト数を計算してリクエストに含める
+2. **チャンク転送をやめる**：`Transfer-Encoding: chunked` を外し、バッファして送る
+3. **ライブラリのバージョンを確認**：HTTP クライアントが意図通りヘッダを送っているか
+4. **プロキシ・サーバー設定を確認（管理者向け）**：チャンク転送を許可するか、HTTP/1.1 互換性を整える
+
+<ResponseExample status={411} statusText="Length Required" />

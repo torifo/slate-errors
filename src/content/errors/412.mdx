@@ -1,0 +1,51 @@
+---
+code: 412
+name: "Precondition Failed"
+nameJa: "前提条件が満たされません"
+category: client
+summary: If-Match などの前提条件が満たされませんでした。
+synonyms: ["precondition", "412", "楽観ロック失敗", "前提失敗", "if-match"]
+related: [428, 409]
+commonCauses:
+  - title: 別ユーザーが先に更新して ETag が変わった
+    hint: 取得時の ETag と最新 ETag がずれている
+  - title: If-Unmodified-Since の時刻を過ぎている
+    hint: 指定した時刻より新しい更新が入ってしまった
+  - title: 条件付きリクエストの仕様誤解
+    hint: If-Match の値の引用符や弱い ETag (W/) の扱いを誤っている
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.13"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.13"
+    source: rfc
+  - label: "MDN: 412 Precondition Failed"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/412"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+412 は「『まだ書き換えられていなかったら更新して』と頼んだのに、もう誰かが書き換えていた」というサインです。
+教室で言えば、黒板の答えが消されていないことを確かめてから書き直そうとしたら、隣の席の子がすでに新しい答えを書き終えていた——そんな状況に近いです。
+
+`If-Match` や `If-Unmodified-Since` のような「条件付きリクエスト」を投げたとき、その条件がサーバー側の今の状態と合わなければ 412 が返ります。データを上書きで壊さないための、安全弁としての応答です。
+
+## 黒板からのひとこと
+
+授業で「自分が見た時点の答えがそのまま残っていたら、続きを書く」と取り決めをしておくと、複数人で同じノートを編集するときに事故が減ります。誰かが先に更新していたら、その時点で手を止めて確認する——412 はその合図です。
+
+サーバーは断っているのではなく、「いったん最新を見てから、もう一度判断してね」と促しています。最新版を取り直してから、競合した部分を確認して書き直すのが基本の流れです。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **最新の ETag や更新日時を取り直す**：GET でリソースを再取得し、新しい値を取得
+2. **差分を確認**：他者の変更を上書きしてしまっていないか、必要ならマージ
+3. **再送時に新しい If-Match を指定**：取り直した最新の ETag を渡して再リクエスト
+4. **競合検知の方針を整理（管理者向け）**：弱い ETag の扱い、リトライ手順、利用者向けエラーメッセージを整える
+
+<ResponseExample status={412} statusText="Precondition Failed" />
