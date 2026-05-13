@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import ErrorLayout from '@/layouts/ErrorLayout.astro';
+import ErrorHero from '@/components/error/ErrorHero.astro';
+import CommonCauses from '@/components/error/CommonCauses.astro';
+import PrevNext from '@/components/error/PrevNext.astro';
+import RelatedErrors from '@/components/error/RelatedErrors.astro';
+import References from '@/components/error/References.astro';
+
+export async function getStaticPaths() {
+  const errors = await getCollection('errors',
+    ({ id, data }) => !data.draft && !id.startsWith('_'));
+  return errors.map(e => ({
+    params: { code: String(e.data.code) },
+    props: { entry: e },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<ErrorLayout entry={entry}>
+  <ErrorHero entry={entry} />
+
+  {entry.data.commonCauses.length > 0 && (
+    <CommonCauses causes={entry.data.commonCauses} />
+  )}
+
+  <article class="prose-chalk mx-auto">
+    <Content />
+  </article>
+
+  {entry.data.related.length > 0 && (
+    <RelatedErrors codes={entry.data.related} />
+  )}
+
+  <References references={entry.data.references} />
+  <PrevNext code={entry.data.code} />
+</ErrorLayout>
