@@ -1,0 +1,23 @@
+---
+---
+<button class="btn-chalk btn-chalk--ghost text-sm" data-search-trigger>
+  🔎 検索
+</button>
+<dialog class="chalkboard-frame max-w-2xl w-[90%] backdrop:bg-black/60" data-search-dialog>
+  <div class="chalkboard p-6">
+    <div class="relative">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-chalk-dust)] text-xl">🔎</span>
+      <input
+        type="search"
+        class="input-chalk"
+        placeholder="コードか名前で探す..."
+        data-search-input
+        autocomplete="off"
+      />
+    </div>
+    <ul class="mt-3 max-h-96 overflow-y-auto" data-search-results></ul>
+  </div>
+</dialog>
+<script>
+  import('@/components/search/search.client.ts');
+</script>

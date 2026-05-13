@@ -1,0 +1,19 @@
+---
+---
+<div class="relative max-w-2xl mx-auto my-8">
+  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-chalk-dust)] text-xl">🔎</span>
+  <input
+    type="search"
+    class="input-chalk"
+    placeholder="コードか名前で探す... (例: 404, ページなし, timeout)"
+    data-search-input
+    autocomplete="off"
+  />
+  <ul
+    class="absolute top-full left-0 right-0 mt-2 chalkboard hidden max-h-96 overflow-y-auto z-10"
+    data-search-results
+  ></ul>
+</div>
+<script>
+  import('@/components/search/search.client.ts');
+</script>
