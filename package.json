@@ -10,6 +10,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview --base /slate-errors",
     "check": "astro check",
+    "check:content": "tsx scripts/validate-content.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.7.0",
+    "tsx": "^4.21.0",
     "vitest": "^4.1.6"
   }
 }
