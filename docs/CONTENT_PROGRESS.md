@@ -10,10 +10,10 @@
 - [x] 400 Bad Request
 - [x] 401 Unauthorized
 - [x] 405 Method Not Allowed
-- [ ] 409 Conflict
-- [ ] 410 Gone
+- [x] 409 Conflict
+- [x] 410 Gone
 - [ ] 413 Content Too Large
-- [ ] 422 Unprocessable Content
+- [x] 422 Unprocessable Content
 - [ ] 429 Too Many Requests
 - [ ] 501 Not Implemented
 - [ ] 503 Service Unavailable
