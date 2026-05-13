@@ -1,0 +1,30 @@
+---
+import HomeLayout from '@/layouts/HomeLayout.astro';
+import BlackboardFrame from '@/components/layout/BlackboardFrame.astro';
+import { url } from '@/lib/url';
+---
+<HomeLayout title="404 — このページは黒板に書かれていません">
+  <BlackboardFrame size="hero" class="my-12">
+    <div class="text-center">
+      <p class="text-sm text-[var(--color-chalk-dust)] uppercase tracking-widest">Client Error</p>
+      <div class="chalk-numeral my-4">404</div>
+      <h1 class="font-[Finger_Paint] chalk-text-amber text-2xl">Not Found</h1>
+      <p class="text-lg text-[var(--color-chalk-white)] mt-2">— このページは黒板に書かれていません</p>
+    </div>
+
+    <div class="prose-chalk mx-auto mt-8 max-w-xl">
+      <p>
+        ふしぎなことに、いま開いているページが「404」そのものです。
+        黒板に書かれていないURLにたどり着いたとき、サーバーは静かに首を横に振ります。
+      </p>
+      <p>
+        気を取り直して、トップから探してみましょう。
+      </p>
+
+      <div class="text-center mt-8 flex gap-4 justify-center">
+        <a href={url('')} class="btn-chalk">トップへ戻る</a>
+        <a href={url('errors/404/')} class="btn-chalk btn-chalk--ghost">404 の解説を読む</a>
+      </div>
+    </div>
+  </BlackboardFrame>
+</HomeLayout>
