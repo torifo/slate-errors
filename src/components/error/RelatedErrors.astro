@@ -1,0 +1,18 @@
+---
+import { getRelated } from '@/lib/errors';
+import ErrorCard from './ErrorCard.astro';
+
+interface Props { codes: number[]; }
+const { codes } = Astro.props;
+const related = await getRelated(codes);
+---
+{related.length > 0 && (
+  <section class="my-12">
+    <h2 class="text-xl font-[Finger_Paint] chalk-text-amber mb-4">
+      似ているケース
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {related.map(e => <ErrorCard entry={e} compact />)}
+    </div>
+  </section>
+)}
