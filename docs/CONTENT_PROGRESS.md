@@ -6,7 +6,7 @@
 - [x] 403 Forbidden
 - [x] 502 Bad Gateway
 
-## Phase 2: 主要 (0 / 11)
+## Phase 2: 主要 (11 / 11) ✓
 - [x] 400 Bad Request
 - [x] 401 Unauthorized
 - [x] 405 Method Not Allowed
