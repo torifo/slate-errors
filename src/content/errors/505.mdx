@@ -1,0 +1,51 @@
+---
+code: 505
+name: "HTTP Version Not Supported"
+nameJa: "HTTPバージョン非対応"
+category: server
+summary: クライアントが使ったHTTPバージョンをサーバーがサポートしていません。
+synonyms: ["http version", "505", "バージョン非対応", "プロトコル不一致", "version not supported"]
+related: [426, 501]
+commonCauses:
+  - title: 古い HTTP/0.9 や HTTP/1.0 でリクエスト
+    hint: レガシーなクライアントが現代サーバーへ接続している
+  - title: 自作 HTTP クライアントの実装ミス
+    hint: バージョン文字列の指定が不正
+  - title: プロキシ経由のバージョン書き換え
+    hint: 中継で予期せず HTTP/1.0 にダウングレードされている
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.6.6"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.6.6"
+    source: rfc
+  - label: "MDN: 505 HTTP Version Not Supported"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/505"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+505 は「あなたが使っている HTTP のバージョンには、このサーバーは対応していません」というサインです。
+教室で言えば、もう使われなくなった旧版の教科書を持ってきた生徒に、先生が「ごめん、それは去年までのもので、今年の授業はこっちの版でやっているんだ」と返している——そんな状況に近いです。
+
+426 (Upgrade Required) と似ていますが、向きが違います。426 は「同じ通信先で別プロトコルに切り替えてほしい」、505 は「そもそもそのバージョン自体に対応がない」と告げています。多くの場合、クライアント側のライブラリやランタイム更新で解決します。
+
+## 黒板からのひとこと
+
+学校では、教科書が改訂されると古い版は使わなくなります。先生が冷たいわけではなく、授業の前提が新しい版で組み立てられているからです。生徒が新しい教科書に持ち替えれば、すぐに同じ授業に戻れます。
+
+505 もそれと同じで、サーバーは「最新版の通信規格で来てくれれば応えますよ」と言っています。古い HTTP クライアントを使い続けている運用がないか、見直すきっかけにもなります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **HTTP クライアントを更新**：ライブラリ・ランタイムを最新版に
+2. **明示的にバージョンを指定**：HTTP/1.1 や HTTP/2 を意図して使う設定
+3. **プロキシのバージョン挙動を確認**：中継で予期せぬダウングレードが起きていないか
+4. **対応バージョンの公開（管理者向け）**：エラー応答や API ドキュメントで対応 HTTP バージョンを明記
+
+<ResponseExample status={505} statusText="HTTP Version Not Supported" />

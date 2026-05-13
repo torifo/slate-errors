@@ -1,0 +1,48 @@
+---
+code: 506
+name: "Variant Also Negotiates"
+nameJa: "バリアントも選択肢に"
+category: server
+summary: サーバー内部のコンテンツネゴシエーション設定が循環しています。
+synonyms: ["variant", "506", "ネゴシエーション", "循環設定", "transparent content negotiation"]
+related: [500]
+commonCauses:
+  - title: バリアント設定が別のバリアントを指している
+    hint: コンテンツネゴシエーションの設定で参照ループが発生
+  - title: Apache の MultiViews と type-map の組み合わせミス
+    hint: 古いコンテンツネゴシエーション機能で起きやすい
+  - title: 動的バリアント生成での循環
+    hint: 動的に作るバリアントが自分自身を参照している
+rfc: "2295"
+references:
+  - label: "RFC 2295 §8.1"
+    url: "https://www.rfc-editor.org/rfc/rfc2295#section-8.1"
+    source: rfc
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+506 は「サーバー内部のコンテンツの選び分け設定が、循環して終わらなくなっている」というサインです。
+教室で言えば、先生 A に質問したら「先生 B に聞いて」と言われ、先生 B のところに行ったら「先生 A に聞いて」と返された——そんな堂々巡りの場面に近いです。
+
+「Transparent Content Negotiation」という古い仕組みに関連するエラーで、現代的な API ではほとんど見かけません。出会ったとしても原因はサーバー側の設定にあり、クライアント側でできることは限られます。
+
+## 黒板からのひとこと
+
+教室の運営でも、誰が何を担当するかの引き継ぎ表が循環していると、結局誰も対応できなくなります。「これは隣の係に」「いえ、それはこちらの担当ではありません」と、たらい回しになる。先生方は表を引き直して、終端を作ります。
+
+506 もそれと同じで、サーバーは「自分の中で参照が循環していて、結論を出せない」と告白しています。設定ファイルを見直し、参照のループを断ち切るしかありません。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **サーバー管理者へ連絡**：クライアント側でできることは少ない
+2. **時間を置いて再試行**：一時的なデプロイ事故なら短時間で直る可能性
+3. **別のリソースで動作確認**：影響範囲が一部か全体かを切り分ける
+4. **バリアント設定を修正（管理者向け）**：type-map ファイル、MultiViews、動的バリアントの参照グラフを点検
+
+<ResponseExample status={506} statusText="Variant Also Negotiates" />

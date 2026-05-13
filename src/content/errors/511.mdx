@@ -1,0 +1,51 @@
+---
+code: 511
+name: "Network Authentication Required"
+nameJa: "ネットワーク認証が必要"
+category: server
+summary: ネットワーク（Wi-Fi等）の認証が必要です。多くはキャプティブポータル。
+synonyms: ["network auth", "511", "wifi認証", "captive portal", "ネットワーク認証"]
+related: [401, 407]
+commonCauses:
+  - title: 公衆 Wi-Fi のキャプティブポータルが未認証
+    hint: カフェ・空港・ホテルの Wi-Fi で利用同意ページを通っていない
+  - title: 社内ネットワークの利用申請が未提出
+    hint: 入館後ネットワークアクセスのための認証が抜けている
+  - title: VPN 接続後のスプラッシュページ
+    hint: VPN ゲートウェイ側で追加認証を求められている
+rfc: "6585"
+references:
+  - label: "RFC 6585 §6"
+    url: "https://www.rfc-editor.org/rfc/rfc6585#section-6"
+    source: rfc
+  - label: "MDN: 511 Network Authentication Required"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/511"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+511 は「目的のサーバーに行く前に、ネットワークそのものの利用認証を済ませてください」というサインです。
+教室で言えば、廊下で「校内 Wi-Fi 利用申請を出してから教室に入ってね」と先生に呼び止められる——そんな場面に近いです。サーバー本体の認証 (401) ではなく、ネットワーク側の入口での足止めです。
+
+カフェや空港の公衆 Wi-Fi で見かける「利用規約に同意して接続」のページ、いわゆるキャプティブポータルの仕組みです。ブラウザからアクセスすればポータルに飛ぶことが多いですが、API クライアントでは 511 が直接返ってきて気付きにくいことがあります。
+
+## 黒板からのひとこと
+
+校内の Wi-Fi に接続するときは、最初に「利用規約に同意します」「学籍番号を入力します」といった手続きが必要です。これを終えるまでは、教室の中の話 (各サービス) に進めません。校門での受付のような、入口の儀式です。
+
+511 もそれと同じで、まずネットワーク側の入口を通過する必要があります。レスポンス本文や `Link` ヘッダで、認証ページの URL が示されていることが多く、そこから手続きを進めます。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **ブラウザを開いて任意のページにアクセス**：キャプティブポータルへ自動遷移することが多い
+2. **Wi-Fi の利用規約や認証画面を確認**：同意・ログインを完了する
+3. **モバイル回線に切り替えて確認**：ネットワーク側の問題か切り分けできる
+4. **ネットワーク認証の運用を整理（管理者向け）**：ポータル設計、API 利用者向けの案内、Link ヘッダで誘導
+
+<ResponseExample status={511} statusText="Network Authentication Required" />
