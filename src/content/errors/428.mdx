@@ -1,0 +1,51 @@
+---
+code: 428
+name: "Precondition Required"
+nameJa: "前提条件が必要です"
+category: client
+summary: 楽観的ロックなどの前提条件 (If-Match) を含めずにリクエストはできません。
+synonyms: ["precondition required", "428", "etag必須", "if-match 必須", "前提必須"]
+related: [412, 409]
+commonCauses:
+  - title: 更新リクエストに If-Match が付いていない
+    hint: サーバーが ETag による楽観ロックを必須にしている
+  - title: 直接 PUT/PATCH で書き込んでいる
+    hint: 先に GET して ETag を取り、それを指定する手順を踏んでいない
+  - title: ETag のキャッシュが古い
+    hint: 自前で ETag を保持する設計だが更新を反映していない
+rfc: "6585"
+references:
+  - label: "RFC 6585 §3"
+    url: "https://www.rfc-editor.org/rfc/rfc6585#section-3"
+    source: rfc
+  - label: "MDN: 428 Precondition Required"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/428"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+428 は「『誰も先に書き換えていないこと』を確かめずに更新しようとしないでください」というサインです。
+教室で言えば、共有ノートに新しい答えを書く前に「自分が見たときと内容が変わっていないか」を確認するのがクラスのルール、それを飛ばして書こうとしたら先生に止められた——そんな場面です。
+
+412 は「条件を確かめたが満たされなかった」状態で、428 は「そもそも条件を確かめずに来た」状態です。サーバーは安全のため「条件付きリクエストにしてからやり直してください」と返します。
+
+## 黒板からのひとこと
+
+班ノートの編集ルールを「最新を確認してから書く」と決めた教室では、先生は誰かが確認なしで更新しようとしたら手を止めさせます。「壊してしまう前に、必ず最新を見てね」と。これは生徒を疑っているのではなく、共同作業を成り立たせる仕組みです。
+
+428 もそれと同じで、共同編集や同時更新が起きやすい場所では「無条件の上書きはしない」というルールが敷かれています。`If-Match` ヘッダなどを添えてやり直せば、安全に更新できます。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **GET でリソースと ETag を取得**：最新の状態と ETag を手元に置く
+2. **If-Match に ETag を入れて再送**：取得した ETag をそのまま付ける
+3. **クライアントで ETag を保持する仕組み**：取得時に保存し、更新時に必ず添付する
+4. **必須化の仕様を整理（管理者向け）**：どのエンドポイントで ETag 必須か、エラー応答に手順を含める
+
+<ResponseExample status={428} statusText="Precondition Required" />

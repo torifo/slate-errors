@@ -1,0 +1,51 @@
+---
+code: 416
+name: "Range Not Satisfiable"
+nameJa: "範囲が満たせません"
+category: client
+summary: Range ヘッダで指定した範囲が、リソースの範囲外です。
+synonyms: ["range", "416", "レンジ要求失敗", "範囲外", "range not satisfiable"]
+related: [400, 413]
+commonCauses:
+  - title: ファイルサイズより大きい範囲を要求
+    hint: ダウンロードレジューム時の bytes= 指定が実サイズを超えている
+  - title: マルチパート Range の不正な組み合わせ
+    hint: 範囲が重なっていたり、開始>終了になっている
+  - title: サーバーが Range をサポートしていない
+    hint: "Accept-Ranges: none を返すサーバーへの誤った要求"
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.17"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.17"
+    source: rfc
+  - label: "MDN: 416 Range Not Satisfiable"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/416"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+416 は「『200〜300 ページを開いて』と頼まれたけれど、その教科書は 150 ページしかありません」というサインです。
+教室で言えば、まだ書かれていないページを指して「ここを音読して」と言われ、先生が「そんなページないよ」と返す——そんな状況に近いです。
+
+ダウンロードのレジューム機能や、動画/音声のシーク再生でよく使う `Range` リクエストで起きます。クライアント側がファイルサイズを誤って覚えていたり、サーバー側で実サイズが小さくなっていると、範囲がはみ出して 416 が返ります。
+
+## 黒板からのひとこと
+
+授業で「教科書の 200 ページから始めるよ」と先生が言ったとき、その教科書が 150 ページしかなければ、誰もそこを開けません。先生はあわてて「ごめん、これは別の教科書のページ番号だった」と訂正する。範囲の指定にはまず、対象の大きさを把握しておく必要があります。
+
+416 もそれと同じで、まずは「リソースの今のサイズ」を再取得し、その範囲内で要求し直すのが基本です。レスポンスの `Content-Range` ヘッダに、サーバー側の実サイズが書かれています。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **リソースのサイズを取り直す**：HEAD リクエストで Content-Length を再確認
+2. **Range の範囲を修正**：実サイズ以下に収まる開始/終了を指定
+3. **レジューム情報をリセット**：ダウンローダのキャッシュやチェックポイントを更新
+4. **Range の挙動を確認（管理者向け）**：Accept-Ranges、ETag/Last-Modified の整合、CDN のキャッシュキーを点検
+
+<ResponseExample status={416} statusText="Range Not Satisfiable" />

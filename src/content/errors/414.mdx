@@ -1,0 +1,51 @@
+---
+code: 414
+name: "URI Too Long"
+nameJa: "URIが長すぎます"
+category: client
+summary: URLの長さがサーバーの上限を超えています。
+synonyms: ["uri too long", "414", "URL長すぎ", "uri too long", "url 長過ぎ"]
+related: [413, 431]
+commonCauses:
+  - title: GET にクエリパラメータを詰め込みすぎ
+    hint: 検索条件を URL で渡す設計で、項目が爆発している
+  - title: 巨大なトークンや ID を URL に含めている
+    hint: JWT や Base64 のデータを GET の引数に乗せていないか
+  - title: ループによる URL 連結バグ
+    hint: コードの不具合で同じパラメータが何度も追加されている
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.15"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.15"
+    source: rfc
+  - label: "MDN: 414 URI Too Long"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/414"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+414 は「黒板に書こうとしている質問が長すぎて、横幅をはみ出している」というサインです。
+教室で言えば、先生に質問を黒板に書かせてもらえる場面で、内容が長すぎてどうしてもチョークの行が足りない——そんな状況に近いです。サーバーは中身を読む前に、URL という「タイトル行」の長さで止まっています。
+
+ブラウザやサーバー、プロキシ、CDN にはそれぞれ URL 長の上限があり、典型的には 2KB〜8KB 程度です。長い情報は GET ではなく POST のボディで送るのが、王道の解決策になります。
+
+## 黒板からのひとこと
+
+授業中、先生が「今日のテーマ」を黒板の上段に書きます。短ければ綺麗に収まるのに、テーマ自体が長すぎると、改行で他の説明が押し出されてしまう。先生はやがて「これは長いから、別紙に書いて配るね」と判断します。
+
+414 もそれと同じで、URL の上に乗せきれない情報は、本文（リクエストボディ）に移すべき、というメッセージです。設計の段階で「これは GET で渡す情報か、POST で渡す情報か」を見直すきっかけにもなります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **クエリパラメータを減らす**：本当に必要な項目だけに絞る
+2. **GET から POST に変える**：大きな情報はリクエストボディに移す
+3. **ID だけを渡し、詳細はサーバーで解決**：URL にトークンの中身を直接乗せない
+4. **URL 長の上限を見直す（管理者向け）**：プロキシ・サーバーの buffer 設定、ログから引っかかっているリクエストを把握
+
+<ResponseExample status={414} statusText="URI Too Long" />

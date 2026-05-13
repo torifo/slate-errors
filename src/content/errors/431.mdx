@@ -1,0 +1,51 @@
+---
+code: 431
+name: "Request Header Fields Too Large"
+nameJa: "ヘッダが大きすぎます"
+category: client
+summary: リクエストヘッダの合計サイズがサーバー上限を超えています。
+synonyms: ["header too large", "431", "クッキー大きすぎ", "ヘッダ超過", "header overflow"]
+related: [413, 414]
+commonCauses:
+  - title: Cookie が肥大化している
+    hint: 第三者 Cookie や複数サブドメインの Cookie が合算されている
+  - title: 認証トークン (JWT) が大きい
+    hint: クレームを詰め込みすぎて Authorization ヘッダが膨れている
+  - title: カスタムヘッダの増えすぎ
+    hint: トレース用やデバッグ用のヘッダが本番でも残っていないか
+rfc: "6585"
+references:
+  - label: "RFC 6585 §5"
+    url: "https://www.rfc-editor.org/rfc/rfc6585#section-5"
+    source: rfc
+  - label: "MDN: 431 Request Header Fields Too Large"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/431"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+431 は「答案の表紙に書いた個人情報や注釈が長すぎて、回収箱の口に通らない」というサインです。
+教室で言えば、本文よりも余白に書いた付箋やメモのほうが分厚くなって、提出箱の蓋が閉まらない——そんな状況に近いです。本文 (リクエストボディ) ではなく、ヘッダ部分の量で止められています。
+
+サーバーやプロキシには、ヘッダ全体の許容サイズが設定されています。Cookie や JWT、社内独自のトレースヘッダなどが累積して、気付かないうちに上限を超えていることがよくあります。413 はボディの大きさ、431 はヘッダの大きさという棲み分けです。
+
+## 黒板からのひとこと
+
+提出物の表紙には、名前やクラス、日付のような必要な情報を書きます。でも、そこに「補足」「注意書き」「過去の宿題のメモ」まで貼り続けると、本来のノートよりも表紙のほうが厚くなってしまう。先生は「本体は綺麗なのに、表紙が重すぎて受け取れない」と言うしかありません。
+
+431 もそれと同じで、本来の通信に必要な「ラベル類」が膨らみすぎると、サーバーは受け付けを止めます。ヘッダを点検して不要なものを削るか、サーバー側で上限を見直すかの判断になります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **Cookie を整理**：不要なドメインの Cookie を削除、サイズの大きいものを見直す
+2. **JWT のクレームを減らす**：必要最小限の情報だけに絞り、残りはサーバー側で解決
+3. **カスタムヘッダを点検**：デバッグ用やトレース用が本番に漏れていないか
+4. **ヘッダ上限の運用を整える（管理者向け）**：プロキシ・サーバーの max_header_size、エラー応答での原因明示
+
+<ResponseExample status={431} statusText="Request Header Fields Too Large" />

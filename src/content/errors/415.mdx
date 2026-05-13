@@ -1,0 +1,51 @@
+---
+code: 415
+name: "Unsupported Media Type"
+nameJa: "サポートされないメディアタイプです"
+category: client
+summary: リクエストの Content-Type にサーバーが対応していません。
+synonyms: ["unsupported media", "415", "content-type 非対応", "メディアタイプ", "型違い"]
+related: [400, 406]
+commonCauses:
+  - title: JSON を期待する API に form-urlencoded を送っている
+    hint: Content-Type と実際のボディ形式が食い違っている
+  - title: ファイルアップロードで非対応の MIME タイプ
+    hint: 画像 API なのに PDF を送っている、など
+  - title: Content-Type ヘッダの書き間違い
+    hint: 大小文字、charset の付け方、typo を見直す
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.16"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.16"
+    source: rfc
+  - label: "MDN: 415 Unsupported Media Type"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/415"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+415 は「中身は受け取ったけれど、その形式は私たちには扱えません」というサインです。
+教室で言えば、水彩画の授業に粘土だけを持ってきてしまった——道具自体は立派でも、その日の授業の道具立てに合っていなかった、そんな場面です。
+
+サーバーが受け付ける `Content-Type` を超えた形式が来たとき、415 は「形式から見直してほしい」と返します。中身そのものの善し悪しは判定していません。だから JSON を期待しているところに XML を送っても、内容が完璧でも 415 で止まります。
+
+## 黒板からのひとこと
+
+美術の授業に、その日のテーマに合わない道具を持ってきた生徒がいると、先生は「今日は水彩だから、粘土はまた今度ね」と返します。意地悪ではなく、その授業の進め方が決まっているからです。生徒は道具を入れ替えてくれば、授業に参加できます。
+
+415 もそれと同じで、サーバーは「うちで扱える形式に整えて出し直してね」と教えてくれているだけです。レスポンスに `Accept` ヘッダで「ここで受け付ける形式」が示されていることもあります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **Content-Type ヘッダを正しく付ける**：JSON なら `application/json` を明示
+2. **ボディの形式とヘッダを一致させる**：実際に送っているバイト列と宣言を揃える
+3. **API ドキュメントで対応形式を確認**：受け付ける MIME タイプの一覧を確認
+4. **対応形式を明記（管理者向け）**：エラー応答に Accept ヘッダを返し、ドキュメントにも対応形式を整理
+
+<ResponseExample status={415} statusText="Unsupported Media Type" />

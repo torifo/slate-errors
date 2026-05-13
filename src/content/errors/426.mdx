@@ -1,0 +1,51 @@
+---
+code: 426
+name: "Upgrade Required"
+nameJa: "プロトコル切替が必要です"
+category: client
+summary: より新しいプロトコル (HTTP/2, TLS等) への切替が必要です。
+synonyms: ["upgrade required", "426", "プロトコル更新", "protocol upgrade", "切替必要"]
+related: [505]
+commonCauses:
+  - title: HTTP のまま叩いていて HTTPS が必須
+    hint: TLS への切替を求められているケース
+  - title: 古い HTTP/1.0 や HTTP/1.1 から HTTP/2 への切替
+    hint: サーバーが新しいプロトコルでしか応答しない
+  - title: WebSocket への Upgrade が必要なエンドポイント
+    hint: 通常の HTTP ではなく Upgrade ヘッダ経由で接続するべき
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.22"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.22"
+    source: rfc
+  - label: "MDN: 426 Upgrade Required"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/426"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+426 は「今のやり方ではもう受け付けません、新しい道具に切り替えてください」というサインです。
+教室で言えば、ずっと使ってきた古い黒板から、ホワイトボードに切り替わった日。チョークではなくマーカーで書かないと反応しない——そんな移行期の場面に近いです。
+
+サーバーは「同じ通信先でも、別のプロトコルでなら応えるよ」と言っています。レスポンスの `Upgrade` ヘッダに、切り替えるべきプロトコル (例: TLS/1.3, HTTP/2) が書かれていることが多く、それを見て対応します。
+
+## 黒板からのひとこと
+
+学校でも、新しい設備が入ったら使い方が変わります。古い道具で同じことをしようとすると、先生に「もう新しい道具を使ってね」と言われる。設備自体の安全や効率のためで、生徒だけに不便を強いているわけではありません。
+
+426 もそれと同じで、サーバーは安全性 (TLS) や効率 (HTTP/2/3) のために、新しいプロトコルでの再接続を求めています。クライアント側のライブラリやランタイムを更新するのが、いちばん素直な対処です。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **HTTPS に切り替える**：HTTP で叩いていたなら https:// で再接続
+2. **HTTP クライアントの設定を見直す**：ALPN、HTTP/2 の有効化、TLS バージョンを最新に
+3. **Upgrade ヘッダを読む**：サーバーが指定するプロトコルに合わせる
+4. **対応プロトコルを整理（管理者向け）**：エラー応答での Upgrade ヘッダ、利用者向けの移行ガイドを整える
+
+<ResponseExample status={426} statusText="Upgrade Required" />
