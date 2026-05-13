@@ -1,0 +1,52 @@
+---
+code: 405
+name: "Method Not Allowed"
+nameJa: "このメソッドは許可されていません"
+category: client
+summary: URLは存在しますが、使ったHTTPメソッド (GET/POST等) が許可されていません。
+synonyms: ["method not allowed", "メソッド不正", "POST禁止", "405", "GETしか受け付けない"]
+related: [400, 501]
+commonCauses:
+  - title: 読み取り専用エンドポイントに POST/PUT
+    hint: 一覧取得用の URL に書き込みを送っていないか
+  - title: フォームの method 属性が間違っている
+    hint: GET と POST を取り違えている HTML をまず疑う
+  - title: API のバージョン違いでメソッドが変わった
+    hint: v1 では PUT、v2 では PATCH のような変更履歴を確認
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.6"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.6"
+    source: rfc
+  - label: "MDN: 405 Method Not Allowed"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/405"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+405 は「URL は確かに合っているけれど、その入り方は許していません」というサインです。
+教室で言えば、正しい教室の前まで来たのに、見学用の出入口から授業に乱入してしまった——そんな状況です。サーバーは「場所」は認識しています。問題は「やり方」のほうです。
+
+レスポンスには `Allow` ヘッダが付いていることが多く、そこに「ここでは GET と HEAD だけ受け付けます」のように、許可されているメソッドが書かれています。まずはそのヘッダを読むのが近道です。
+
+## 黒板からのひとこと
+
+校舎の入口にはいくつもの扉があり、それぞれ「生徒昇降口」「業者用搬入口」「来賓玄関」と役割が決まっています。同じ建物に着いても、用件によって入る扉は違います。間違えれば、警備員に「こっちじゃないですよ」と止められる。
+
+405 もそれと同じです。URL という建物には着いている。でも GET 用の入口に POST で入ろうとしている。サーバーは扉を指差して「使うならこの方法ですよ」と教えてくれているだけです。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **使っているメソッドを確認**：fetch の `method` や form の `method` 属性が意図したものになっているか
+2. **レスポンスの Allow ヘッダを読む**：そのエンドポイントが受け付けるメソッドが列挙されている
+3. **API ドキュメントと突き合わせる**：仕様変更で PUT が PATCH に変わったケースもよくある
+4. **ルーティング設定を確認（管理者向け）**：フレームワークのルート定義、リバースプロキシのメソッド制限を順に
+
+<ResponseExample status={405} statusText="Method Not Allowed" />

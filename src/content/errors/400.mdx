@@ -1,0 +1,52 @@
+---
+code: 400
+name: "Bad Request"
+nameJa: "リクエストが正しくありません"
+category: client
+summary: リクエストの形式や内容にサーバーが理解できない問題があります。
+synonyms: ["bad request", "リクエスト不正", "パラメータ間違い", "400エラー", "形式不正"]
+related: [422, 411, 414]
+commonCauses:
+  - title: JSON のシンタックスエラー
+    hint: カンマ抜けや末尾カンマ、引用符の不整合をパーサが拾う
+  - title: 必須パラメータの欠落
+    hint: API 仕様書とリクエストを並べて照合する
+  - title: Content-Type ヘッダの不一致
+    hint: application/json なのに form-urlencoded で送っていないか
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.1"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.1"
+    source: rfc
+  - label: "MDN: 400 Bad Request"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/400"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+400 は「送られてきたリクエストの形がおかしくて、サーバーがそもそも読み解けなかった」というサインです。
+教室で言えば、先生に手渡したメモが破れていたり、字がにじんでいて、どんな質問なのかさえ判別できない——そんな状況に近いかもしれません。
+
+JSON のカンマが一つ抜けている、必須のフィールドが入っていない、ヘッダの綴りが違う。サーバーは「中身を見る前の段階」で受け取りを拒否します。だからこそ、まず疑うべきはコードのロジックではなく、リクエストそのものの形です。
+
+## 黒板からのひとこと
+
+授業で先生に質問するとき、紙に書いた文字が読めなければ、先生は「ごめん、もう一度書き直してくれる？」と返します。怒っているのではなく、読み取れないだけ。400 もそれと同じで、サーバーは中身の正誤を判断する前に、形式の段階でつまずいています。
+
+リクエストは「サーバーへの手紙」です。封筒の宛名が滲んでいたり、便箋がぐちゃぐちゃだったりすれば、中身を読んでもらう前に止まる。整えてから送り直せば、たいてい次は通ります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **リクエストボディと Content-Type を確認**：JSON なのに text/plain で送っていないか、ボディが空ではないか
+2. **必須パラメータを洗い直す**：API ドキュメントを開いて、欠けているフィールドや型違いがないか
+3. **生のリクエストをログに出して目視**：curl や DevTools の Network タブで、実際に飛んでいるバイト列を確認
+4. **バリデーションログを確認（管理者向け）**：どのフィールドで弾いているか、エラーメッセージを利用者に返せているか
+
+<ResponseExample status={400} statusText="Bad Request" />

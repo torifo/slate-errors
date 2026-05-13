@@ -7,9 +7,9 @@
 - [x] 502 Bad Gateway
 
 ## Phase 2: 主要 (0 / 11)
-- [ ] 400 Bad Request
-- [ ] 401 Unauthorized
-- [ ] 405 Method Not Allowed
+- [x] 400 Bad Request
+- [x] 401 Unauthorized
+- [x] 405 Method Not Allowed
 - [ ] 409 Conflict
 - [ ] 410 Gone
 - [ ] 413 Content Too Large

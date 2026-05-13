@@ -1,0 +1,52 @@
+---
+code: 401
+name: "Unauthorized"
+nameJa: "認証が必要です"
+category: client
+summary: 認証情報がないか、無効なため、リソースにアクセスできません。
+synonyms: ["認証エラー", "ログインしてない", "unauthorized", "トークン切れ", "401"]
+related: [403, 407]
+commonCauses:
+  - title: ログインしていない / セッション切れ
+    hint: Cookie の有効期限や保存状況をまず確認
+  - title: アクセストークンの期限切れ
+    hint: リフレッシュトークンで再発行する必要がある
+  - title: Authorization ヘッダの綴り間違い
+    hint: Bearer の後ろのスペースや大文字小文字、トークン文字列の欠落を見直す
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.2"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.2"
+    source: rfc
+  - label: "MDN: 401 Unauthorized"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/401"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+401 は「あなたが誰なのかが分からないので、この先には入れません」というサインです。
+教室で言えば、職員室の入口で「身分証を見せてください」と言われたのに、何も提示せずに入ろうとした——そんな場面です。
+
+認証情報そのものが付いていなかったり、トークンが期限切れだったり、ヘッダの綴りが違っていたり。サーバーはあなたを拒否しているのではなく、「まだ誰だか確認できていない」状態です。403（権限がない）とは原因の階層がひとつ違います。
+
+## 黒板からのひとこと
+
+職員室や保健室には「先生用」の表示があり、生徒も先生も入る前に身分を示します。誰もが入れる場所と、確認が必要な場所がある——これは安全のための仕組みで、特定の誰かを締め出すためではありません。
+
+401 が返ってくるとき、サーバーは「もう一度、身分を提示してくれる？」と尋ねています。多くの場合は再ログインや、トークンの更新で解決します。怒られているのではなく、確認を求められているだけです。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **ログイン状態を確認**：セッションが切れていないか、別タブでログアウトしていないか
+2. **トークンの期限を確認**：JWT なら exp を見て、期限切れならリフレッシュ
+3. **Authorization ヘッダの中身を見る**：`Bearer xxx` の綴り、トークンが切れて欠けていないか
+4. **認証サーバーの状態を確認（管理者向け）**：IdP のヘルス、署名鍵のローテーション、時刻同期 (NTP) のずれを順に
+
+<ResponseExample status={401} statusText="Unauthorized" />
