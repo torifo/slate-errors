@@ -1,0 +1,31 @@
+---
+import type { ErrorEntry } from '@/lib/errors';
+import { url } from '@/lib/url';
+
+interface Props {
+  entry: ErrorEntry;
+  compact?: boolean;
+}
+const { entry, compact = false } = Astro.props;
+const href = url(`errors/${entry.data.code}/`);
+---
+<a
+  href={href}
+  class={`block group !no-underline ${compact ? 'p-3' : 'p-5'} chalkboard rounded-[var(--radius-chalk)] hover:scale-[1.02] transition-transform`}
+  style="border: 1px dashed rgba(255,255,255,0.15);"
+>
+  <div class="flex items-baseline gap-3">
+    <span class={`chalk-text-amber font-[Finger_Paint] ${compact ? 'text-xl' : 'text-3xl'}`}>
+      {entry.data.code}
+    </span>
+    <div>
+      <div class="text-[var(--color-chalk-amber)] text-sm">{entry.data.name}</div>
+      <div class="text-[var(--color-chalk-white)] text-base">{entry.data.nameJa}</div>
+    </div>
+  </div>
+  {!compact && (
+    <p class="mt-3 text-sm text-[var(--color-chalk-dust)] line-clamp-2">
+      {entry.data.summary}
+    </p>
+  )}
+</a>
