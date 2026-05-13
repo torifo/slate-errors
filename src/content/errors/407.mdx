@@ -1,0 +1,51 @@
+---
+code: 407
+name: "Proxy Authentication Required"
+nameJa: "プロキシ認証が必要です"
+category: client
+summary: クライアントとサーバーの間にあるプロキシで認証が必要です。
+synonyms: ["proxy auth", "407", "プロキシ認証", "proxy authentication", "認証プロキシ"]
+related: [401, 403]
+commonCauses:
+  - title: 社内プロキシの認証情報が抜けている
+    hint: ブラウザや CLI ツールにプロキシ設定が反映されていない
+  - title: プロキシ用のユーザー/パスワードの期限切れ
+    hint: AD アカウントのパスワード変更直後によく起きる
+  - title: Proxy-Authorization ヘッダの設定漏れ
+    hint: HTTPS_PROXY などの環境変数や CONNECT 時のヘッダを確認
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.8"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.8"
+    source: rfc
+  - label: "MDN: 407 Proxy Authentication Required"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/407"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+407 は「目的の教室に入るためには、まずその前に立っている先生に身分証を見せてください」というサインです。
+教室で言えば、生徒が職員室に向かう途中、廊下で別の先生に「ちょっと待って、誰のクラス？」と止められる——そんな場面に近いです。
+
+401 がサーバー本体への認証要求なのに対して、407 は「中継役（プロキシ）」が独自に求める認証です。会社や学校のネットワークでは、外への通信がプロキシ経由になっていることが多く、その入口で身分確認をされます。レスポンスには `Proxy-Authenticate` ヘッダが付き、どんな方式の認証が必要かが書かれています。
+
+## 黒板からのひとこと
+
+学校では、教室と職員室の間に「来訪者受付」のような窓口があることがあります。先生に会う前に、まずそこで名簿に名前を書く。誰のところに行くのか、どこから来たのかを確認してから通してもらえる仕組みです。
+
+407 もそれと同じで、ネットワークの境界に立っているプロキシが「私たちの組織の人ですか？」と確認しています。サーバーが拒んでいるわけではなく、入口の手前で止まっているだけです。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **プロキシの認証情報を確認**：社内ヘルプデスクや IT 担当に最新の設定を確認
+2. **環境変数や CLI 設定を見直す**：`HTTPS_PROXY=http://user:pass@proxy:8080` のような形式
+3. **Proxy-Authenticate ヘッダを読む**：Basic、NTLM、Negotiate など方式に応じた対応を
+4. **プロキシのログを確認（管理者向け）**：認証失敗の理由、対象 URL、利用者名から原因を切り分ける
+
+<ResponseExample status={407} statusText="Proxy Authentication Required" />
