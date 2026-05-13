@@ -1,0 +1,52 @@
+---
+code: 413
+name: "Content Too Large"
+nameJa: "リクエストが大きすぎます"
+category: client
+summary: リクエストボディのサイズがサーバーの上限を超えています。
+synonyms: ["too large", "ペイロード超過", "アップロード失敗", "413", "サイズオーバー"]
+related: [414, 431]
+commonCauses:
+  - title: アップロードファイルがサイズ上限を超過
+    hint: 画像や動画、添付ファイルが許容サイズを上回っていないか
+  - title: リバースプロキシの上限が小さい
+    hint: nginx の client_max_body_size やロードバランサの設定を確認
+  - title: JSON ボディが肥大化
+    hint: 配列にレコードを詰め込みすぎていないか、分割送信を検討
+popular: false
+rfc: "9110"
+references:
+  - label: "RFC 9110 §15.5.14"
+    url: "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.14"
+    source: rfc
+  - label: "MDN: 413 Content Too Large"
+    url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Status/413"
+    source: mdn
+updatedAt: 2026-05-13
+---
+
+import ResponseExample from '@/components/error/ResponseExample.astro';
+
+## 何が起きたのか？
+
+413 は「送ろうとしている荷物が、受け取り口の許容サイズを超えています」というサインです。
+教室で言えば、提出する宿題のノートが分厚すぎて、先生の鞄に入らない——そんな状況に近いかもしれません。サーバーは中身を読む前に、入口で「これは無理」と返します。
+
+上限はサーバー側、リバースプロキシ側、アプリ側それぞれに設定されていることが多く、どこで弾かれているかで対処も変わります。レスポンスに `Retry-After` のような追加ヘッダはなく、基本は「分割するか、軽くするか」の二択です。
+
+## 黒板からのひとこと
+
+授業で集めるノートには「ここに入る分まで」という箱が用意されています。箱からあふれるサイズの提出物は、いったん引き取りを止めて「分けて持ってきて」と伝えるしかありません。先生が意地悪をしているわけではなく、教室の運用が成り立たなくなるからです。
+
+413 もそれと同じで、サーバーが大きすぎる入力に押し潰されないための予防線です。「軽くする」「分ける」「上限を見直す」のどれかが、解決の入口になります。
+
+## 解決への歩み
+
+大丈夫、次はこうしてみよう：
+
+1. **送るデータを軽くする**：画像なら圧縮・解像度ダウン、JSON なら不要フィールドを削る
+2. **分割アップロードに切り替える**：multipart や chunked、resumable upload など
+3. **どこの上限で弾かれているか特定**：プロキシのログ、アプリのログ、エラー本文を見比べる
+4. **上限値を見直す（管理者向け）**：プロキシとアプリの両方で整合させ、業務要件に合った値に調整
+
+<ResponseExample status={413} statusText="Content Too Large" />

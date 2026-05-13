@@ -12,9 +12,9 @@
 - [x] 405 Method Not Allowed
 - [x] 409 Conflict
 - [x] 410 Gone
-- [ ] 413 Content Too Large
+- [x] 413 Content Too Large
 - [x] 422 Unprocessable Content
-- [ ] 429 Too Many Requests
+- [x] 429 Too Many Requests
 - [ ] 501 Not Implemented
 - [ ] 503 Service Unavailable
 - [ ] 504 Gateway Timeout
