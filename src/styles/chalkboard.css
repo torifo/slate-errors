@@ -1,0 +1,193 @@
+/* ─────────────────────────────────────────────
+ * Chalkboard surface
+ * ───────────────────────────────────────────── */
+.chalkboard {
+  position: relative;
+  background-color: var(--color-board-deep);
+  background-image:
+    repeating-linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.012) 0 2px,
+      transparent 2px 9px
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1.2px);
+  background-size: auto, 14px 14px;
+  box-shadow: var(--shadow-board);
+  border-radius: var(--radius-chalk);
+}
+
+.chalkboard-frame {
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-frame);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 30%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.06) 0 1px,
+      transparent 1px 7px
+    ),
+    linear-gradient(180deg, var(--color-frame-walnut), var(--color-frame-shadow));
+}
+
+/* ─────────────────────────────────────────────
+ * Chalk text effects
+ * ───────────────────────────────────────────── */
+.chalk-text {
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 6px rgba(244, 236, 216, 0.08);
+}
+.chalk-text-amber {
+  text-shadow:
+    0 0 1px rgba(242, 201, 76, 0.3),
+    0 0 8px rgba(242, 201, 76, 0.12);
+}
+.chalk-numeral {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  color: var(--color-chalk-amber);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.4),
+    0 0 12px rgba(242, 201, 76, 0.2);
+  letter-spacing: 0.06em;
+}
+
+.eraser-mark {
+  height: 1.5rem;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 20%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.05) 80%,
+      transparent 100%
+    );
+  filter: blur(2px);
+  border: none;
+  margin: 2rem 0;
+}
+
+.chalk-underline {
+  text-decoration: underline wavy var(--color-chalk-amber);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+/* ─────────────────────────────────────────────
+ * Chalk buttons & inputs (デフォルト上書きのチョーク版)
+ * ───────────────────────────────────────────── */
+.btn-chalk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--color-chalk-amber);
+  background: rgba(0, 0, 0, 0.18);
+  border: 2px dashed var(--color-chalk-amber);
+  border-radius: var(--radius-chalk);
+  text-shadow: 0 0 6px rgba(242, 201, 76, 0.15);
+  transition: all 200ms var(--ease-chalk);
+  cursor: pointer;
+  position: relative;
+}
+.btn-chalk::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1.2px);
+  background-size: 14px 14px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.btn-chalk:hover {
+  background: rgba(242, 201, 76, 0.1);
+  transform: translateY(-1px);
+}
+.btn-chalk:active { transform: translateY(0); }
+.btn-chalk[disabled] { opacity: 0.4; cursor: not-allowed; }
+.btn-chalk--ghost {
+  color: var(--color-chalk-white);
+  border-color: var(--color-chalk-dust);
+  background: transparent;
+}
+
+.input-chalk {
+  width: 100%;
+  padding: 0.85rem 1.1rem 0.85rem 3rem;
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--color-chalk-white);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1.5px dashed var(--color-chalk-dust);
+  border-radius: var(--radius-chalk);
+  transition: all 200ms var(--ease-chalk);
+}
+.input-chalk::placeholder {
+  color: var(--color-chalk-dust);
+  font-style: italic;
+}
+.input-chalk:focus {
+  outline: none;
+  border-color: var(--color-chalk-amber);
+  box-shadow: 0 0 0 3px rgba(242, 201, 76, 0.15);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ─────────────────────────────────────────────
+ * MDX 本文用 (prose-chalk)
+ * ───────────────────────────────────────────── */
+.prose-chalk {
+  color: var(--color-chalk-white);
+  font-size: var(--text-lg);
+  line-height: 1.85;
+  max-width: 64ch;
+}
+.prose-chalk h2 {
+  font-family: var(--font-display);
+  color: var(--color-chalk-amber);
+  font-size: var(--text-2xl);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(242, 201, 76, 0.3);
+}
+.prose-chalk h3 {
+  font-family: var(--font-display);
+  color: var(--color-chalk-amber);
+  font-size: var(--text-xl);
+  margin: 2rem 0 0.75rem;
+}
+.prose-chalk p {
+  margin: 0.85rem 0;
+}
+.prose-chalk ol, .prose-chalk ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+.prose-chalk ol li, .prose-chalk ul li {
+  margin: 0.4rem 0;
+}
+.prose-chalk strong {
+  color: var(--color-chalk-amber);
+  font-weight: 500;
+}
+.prose-chalk blockquote {
+  border-left: 3px dashed var(--color-chalk-dust);
+  padding-left: 1rem;
+  color: var(--color-chalk-dust);
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+.prose-chalk pre {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-chalk);
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
