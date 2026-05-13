@@ -15,9 +15,9 @@
 - [x] 413 Content Too Large
 - [x] 422 Unprocessable Content
 - [x] 429 Too Many Requests
-- [ ] 501 Not Implemented
-- [ ] 503 Service Unavailable
-- [ ] 504 Gateway Timeout
+- [x] 501 Not Implemented
+- [x] 503 Service Unavailable
+- [x] 504 Gateway Timeout
 
 ## Phase 3: 残り (0 / 25)
 ### 4xx
