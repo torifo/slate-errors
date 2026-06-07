@@ -1,5 +1,12 @@
 # Slate Errors
 
+<!-- tech-stack:start (auto-generated) -->
+<p align="center">
+  <img src="https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=white" alt="Astro">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+</p>
+<!-- tech-stack:end -->
+
 放課後の黒板で、HTTPエラーを学び直す。
 
 > エラーは間違いではない、発見である。
